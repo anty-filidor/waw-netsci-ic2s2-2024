@@ -91,15 +91,6 @@
 \date[05.06.2024]{05.06.2024}
 \logo{\includegraphics[height=0.5cm]{figures/nsl.pdf}}
 
-% What will be displayed at the beginning of each section and at the end of document
-% \AtBeginSection[]
-% {
-%   \begin{frame}
-%     \begin{center}
-%         \huge \secname
-%     \end{center}
-%   \end{frame}
-% }
 \AtEndDocument{
     \addtocounter{framenumber}{-1}
     \begin{frame}[c]
@@ -141,13 +132,11 @@
 \begin{frame}{\secname}
     Analytical approaches are often insufficient for large graphs, prompting researchers to use 
     computational methods, i.e. simulations.
-
     \begin{center}
         \vspace{1em}
         \arrowdown
         \vspace{1em}
     \end{center}
-    
     Thus, like in other branches of computer science, there have been developed tools which addres 
     that issue, allowing to avoid starting from scratch and enhancing the reproducibility
     of results.\footnote{Although network science still ingloriously stands out in this matter.}
@@ -155,8 +144,8 @@
 
 \begin{frame}{\secname}
     \begin{columns}[T]
-        \begin{column}{.3\textwidth}
-            Indeed, there is a bunch of tools that helps in sumulating diffusion processes in networks:
+        \begin{column}{.35\textwidth}
+            There is a bunch of tools that helps in sumulating diffusion processes in networks:
             \begin{itemize}
                 \item \textbf{NDlib}\cite{ndlib},
                 \item GLEaMviz\cite{gleam},
@@ -168,7 +157,7 @@
             \end{itemize}
         \end{column}
         \hfill
-        \begin{column}{.7\textwidth}
+        \begin{column}{.60\textwidth}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\textwidth]{figures/ndlib.png}
@@ -209,7 +198,7 @@
     \end{enumerate}
 \end{frame}
 
-\section{Key features}
+\section{Key Features}
 
 \begin{frame}{\secname}
     Functionalities of \lstinline[style=py]{network-diffusion}:
@@ -252,10 +241,32 @@
     \end{algorithmic}
 \end{frame}
 
-\section{Example I}
+\section{Example I - a Predefined Model}
 
 \begin{frame}{\secname}
-    A story...
+    In this example, we will see how to trigger spread under the Linear Threshold Model within a 
+    simple, multilayer network.
+    \begin{block}{Linear Threshold Model}
+    Each node:
+    \begin{itemize}
+        \item can fall in two states: \textit{active} and \textit{inactive},
+        \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all neighbours
+        exceeds certain threshold.
+    \end{itemize}
+    \end{block}
+    In case of multilayer networks the actors not the nodes\footnote{which can be considered as avatars
+    of the actors on the network's layers} are a subject of the diffusion. Thus, we have to define
+    how to aggregate impulses from the layers. In this example we will consider "OR" strategy, which 
+    says that the actor can be activated if any of nodes representing it in the network gets activated.
+\end{frame}
+
+\begin{frame}{\subsubsecname}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\textwidth]{figures/ltm_example_or.pdf}
+        \caption{Propagation according to LTM with the $OR$ protocol in a multilayer network -
+        active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
+    \end{figure}
 \end{frame}
 
 \begin{frame}{\secname}
@@ -264,10 +275,38 @@
     \end{center}
 \end{frame}
 
-\section{Example II}
+\section{Example II - a Custom Model}
 
 \begin{frame}{\secname}
-    A story...
+    In this example we will consider a joint disease-awareness model (SIR-UA) that can be used e.g.
+    to assess the effectiveness of various countermeasures against the spread of COVID-19 
+    (\textbf{see the next presentation for details}):
+    \begin{columns}[T]
+        \captionsetup{font=scriptsize}
+        \begin{column}{.5\textwidth}
+            \begin{table}
+            \centering
+            \caption{Transition weights with explanation.}
+            \resizebox{1\textwidth}{!}{%
+            \begin{tabular}{c|c|p{4cm}}
+            Symbol & Formula / Value & Description \\ \hline
+            $\alpha$ & $0.19$ & probability of infection for unaware agents \\ \hline
+            $\alpha'$ & $0.35\alpha=0.07$ & probability of infection for aware agents \\ \hline
+            $\beta$ & $0.10$ & probability of recovery \\ \hline
+            $\gamma$ & $0.01$ & probability of awareness for uninfected agents \\ \hline
+            $\delta$& $\gamma + 1 - 0.3$ & probability of awareness for infected agents \\ \hline
+            \end{tabular}%
+            }
+            \end{table}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{figures/sir_ua.png}
+            \caption{State and transition graph for SIR-UA.}
+        \end{figure}
+        \end{column}
+      \end{columns}
 \end{frame}
 
 \begin{frame}{\secname}
@@ -276,7 +315,7 @@
     \end{center}
 \end{frame}
 
-\section{Resources and references}
+\section{Resources and References}
 
 \begin{frame}[fragile]{\secname}
     The library can be installed via:
@@ -286,7 +325,7 @@
             pip install network-diffusion
         \end{verbatim}
     \end{center}
-    Other useful resources have also been published:
+    Other useful resources have been also published:
     \begin{itemize}
         \item PyPI website: \url{pypi.org/project/network-diffusion}
         \item GitHub page: \url{github.com/anty-filidor/network_diffusion}
@@ -295,115 +334,37 @@
     \end{itemize}
 \end{frame}
 
+\section{Limitations of \lstinline[style=py]{network-diffusion}}
 
-
-% \begin{frame}{\subsecname}
-%     Contribution -- we conducted a study on the disease-awareness model (SIR-UA)
-%     to assess the effectiveness of measures against the spread of COVID-19:
-%     \textcolor{red}{lockdown}, \textcolor{red}{wearing masks}, or \textcolor{red}{no restrictions}
-%     based on real parameters published in medical scientific literature (e.g., Lancet):
-%     \begin{columns}[T]
-%         \captionsetup{font=scriptsize}
-%         \begin{column}{.5\textwidth}
-%             \begin{table}
-%             \centering
-%             \caption{Transition weights with explanation.}
-%             \resizebox{1\textwidth}{!}{%
-%             \begin{tabular}{c|c|p{4cm}}
-%             Symbol & Formula / Value & Description \\ \hline
-%             $\alpha$ & $0.19$ & probability of infection for unaware agents \\ \hline
-%             $\alpha'$ & \makecell{
-%                 $\lambda\alpha;$ \\ \textcolor{red}{$\pmb{\lambda \in \{ 0.1, 0.35, 1\}}$}
-%             } & probability of infection for aware agents \\ \hline
-%             $\beta$ & $0.10$ & probability of recovery \\ \hline
-%             $\gamma$ & $0.01$ & probability of awareness for uninfected agents \\ \hline
-%             $\delta$& $\gamma + 1 - 0.3$ & probability of awareness for infected agents \\ \hline
-%             \end{tabular}%
-%             }
-%             \end{table}
-%         \end{column}
-%         \begin{column}{0.5\textwidth}
-%         \begin{figure}
-%             \centering
-%             \includegraphics[width=\textwidth]{figures/sir_ua/sir_ua.png}
-%             \caption{State and transition graph for SIR-UA.}
-%         \end{figure}
-%         \end{column}
-%       \end{columns}
-% \end{frame}
-
-% \begin{frame}{\subsecname}
-%     Conclusions -- for each of the investigated networks (ER, SF, real), 
-%     sanitary restrictions have an impact on the peak number of infections, which
-%     is of significant importance in the context of healthcare system capacity
-%     during epidemics.
-%     \begin{figure}[ht]
-%         \centering
-%         % \includegraphics[width=.8\textwidth]{figures/sir_ua/sir_ua_aucs.png}
-%         % \includegraphics[width=.8\textwidth]{figures/sir_ua/sir_ua_sf.png}
-%         \includegraphics[width=.8\textwidth]{figures/sir_ua/sir_ua_er.png}
-%         \caption{Infection (L) and awareness (R) curves for ER network.}
-%     \end{figure}
-% \end{frame}
-
-
-% \subsubsection{Influence Maximisation Problem}
-
-% \begin{frame}{\subsubsecname}
-%     \begin{figure}
-%         \centering
-%         \includegraphics[width=.7\textwidth]{figures/im_framework.pdf}
-%         \caption{Components needed to define the influence maximisation problem.}
-%     \end{figure}
-% \end{frame}
-
-% \begin{frame}{\subsubsecname}
-%     We can distinguish three groups of methods for selecting seed set (i.e. 
-%     ininitally active agenst "patients zero"):
-%     \begin{itemize}
-%         \item simulation-based
-%         \begin{itemize}
-%             \item ...
-%         \end{itemize}
-%         \item heuristic-based
-%         \begin{itemize}
-%             \item \textbf{rank refinement}
-%             \item model reduction
-%         \end{itemize}
-%         \item mixed approaches
-%         \begin{itemize}
-%             \item ...
-%         \end{itemize}
-%     \end{itemize}
-%     Methods from the rank-refining subgroup are based on creating ranked lists of
-%     agents, without the need for information about the spreading model.
-% \end{frame}
-
-% \begin{frame}{\subsubsecname}
-%     Constraints can be imposed on the problem of selecting seeds. This
-%     could be a budget constraint, i.e., we can use only $s$ agents as a seed set
-%     (the smaller the budget, the harder it gets to cover entire network by the
-%     process).
-% \end{frame}
-
-% \subsubsection{Spreading Model}
-% \begin{frame}{\subsubsecname}
-%     How does the spreading model work?
-%     \begin{itemize}
-%         \item an environment --- a network model (i.e. temporal, static, directed etc.),
-%         \item defined states of agents (usually: active / inactive),
-%         \item defined a function determining when an agent changes state (usually
-%         based on an external impulse from its neighbours),
-%     \end{itemize}
-%     In the literature, the most commonly considered spreading models are: the 
-%     Independent Cascade Model and the \textbf{Linear Threshold Model}. \\
-%     Multilayer networks, the issue is determining who is the subject of
-%     diffusion: node or actor (there are many ambiguities in the literature
-%     w.r.t. this problem; we used the latter approach).
-% \end{frame}
+\begin{frame}{\secname}
+    \begin{itemize}
+        \item \textbf{Python Implementation}
+            \begin{itemize}
+                \item Advantage and drawback due to slower performance.
+            \end{itemize}
+        \item \textbf{Partial C Code}
+            \begin{itemize}
+                \item Some code in C with Python bindings, limited by small team.
+            \end{itemize}
+        \item \textbf{Support for Discrete Spreading}
+            \begin{itemize}
+                \item Limited to discrete spreading processes.
+            \end{itemize}
+        \item \textbf{Framework Design}
+            \begin{itemize}
+                \item Set of interfaces for custom experiments.
+                \item Few pre-defined spreading models compared to NDlib.
+            \end{itemize}
+        \item \textbf{No User Interface}
+            \begin{itemize}
+                \item Not user-friendly for non-programmers.
+                \item Alternatives like NetLogo required.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
 \begin{frame}[allowframebreaks]
-    \frametitle{\secname}
+    \frametitle{References}
     \bibliographystyle{amsalpha}
     \bibliography{references.bib}
 \end{frame}
@@ -411,6 +372,3 @@
 \addtocounter{framenumber}{1}
 
 \end{document}
-
-
-% nawiązać do pracki damianac
