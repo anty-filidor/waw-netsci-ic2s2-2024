@@ -4,13 +4,6 @@
 \usetheme{Madrid}
 \usecolortheme{default}
 
-% For the bibliography
-\usepackage{bibentry}
-\renewcommand{\refname}{Literature}
-\usepackage[style=nature, backend=biber]{biblatex}
-\preto\fullcite{\AtNextCite{\defcounter{maxnames}{99}}}
-\addbibresource{references.bib}
-
 % For Polish langage
 \usepackage[T1]{fontenc}
 % \usepackage[polish]{babel}
@@ -95,7 +88,7 @@
   \inst{1} Wroc{\l}aw University of Science and Technology\\
   \inst{2} University of Technology Sydney
 }
-\date[21.05.2024]{21.05.2024}
+\date[05.06.2024]{05.06.2024}
 \logo{\includegraphics[height=0.5cm]{figures/nsl.pdf}}
 
 % What will be displayed at the beginning of each section and at the end of document
@@ -409,9 +402,11 @@
 %     w.r.t. this problem; we used the latter approach).
 % \end{frame}
 
-% \begin{frame}{Literatura}
-%     \printbibliography
-% \end{frame}
+\begin{frame}[allowframebreaks]
+    \frametitle{\secname}
+    \bibliographystyle{amsalpha}
+    \bibliography{references.bib}
+\end{frame}
 
 \addtocounter{framenumber}{1}
 
