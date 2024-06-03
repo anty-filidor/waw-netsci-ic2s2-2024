@@ -1,1 +1,7 @@
 **/.DS_Store
+*.bbl
+*.nav
+*.run.xml
+*.snm
+*.synctex.gz
+*.vrb

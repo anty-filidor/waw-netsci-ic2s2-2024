@@ -34,6 +34,34 @@
 % For math
 \usepackage{amsmath,amsfonts}
 
+% For inline code listings
+\usepackage{listings}
+\usepackage{xparse}
+\usepackage{xcolor}
+\lstdefinestyle{py}{
+  language=Python,
+  basicstyle=\small\ttfamily,
+  commentstyle=\color{green!40!black},
+  keywordstyle=\color{blue},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  numbersep=5pt,
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{black},
+  tabsize=4,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=true,
+  title=\lstname,
+  caption=\lstname
+}
+
+% For algorithms
+\usepackage{algorithm,algpseudocode}
+
 % Title page
 \title[WAW 2024]{19th Workshop on Modelling and Mining Networks}
 \subtitle{
@@ -41,7 +69,7 @@
     Networks
 }
 \author[Micha{\l} Czuba et al.]{
-    Micha{\l} Czuba \inst{1},
+    \textbf{Micha{\l} Czuba} \inst{1},
     Mateusz Nurek \inst{1},
     Damian Serwata \inst{1},
     Yu-Xuan Qi \inst{2},
@@ -91,14 +119,127 @@
 \end{frame}
 
 \section{What is this talk about?}
-% - we woud like to present a package 
-% - for whom
-% - why
-% - 
+
+\begin{frame}{\secname}  % do zastanowienia
+    In this talk I will show you a library that allows for simulating spreading
+    phenomena in complex networks. The idea for the library has origins in the NSL,
+    but the implementation was conducted in a borader group including UTS.
+\end{frame}
+
+\section{Motivation}
+
+\begin{frame}{\secname}
+    Spreading phenomena can be obeserved in various areas like: dynamics of 
+    political opinions, marketing campaigns, spread of epidemics, computer 
+    viruses, etc.
+    \begin{figure}
+        \centering
+        \includegraphics[width=.7\textwidth]{figures/social_network.jpg}
+        \caption{Artistic representation of a social network.\footnote{Source: \url{
+        www.uniroma3.it/articoli/seminario-biased-opinion-dynamics-when-the-devil-is-in-the-details-138122}
+        }}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\secname}
+    This issue is one of the areas considered within a network science discipline.
+
+    The analytical approaches are not sufficient for large graphs, therefore researchers use 
+    computational approaches for that.
+
+    Natuarlly, likie in another branches of a computer scince, there are tools that faclilitate the 
+    computations so that scientists do not have to start from the boilerplates. Also they provide a
+    reproducility of the results.\footnote{altohugh network science ingloriously stands out in this matter}
+\end{frame}
+
+\begin{frame}{\secname}
+    Indeed there is a bunch of tools that helps in sumulating diffusion processes in networks. A very
+    good example is ndlib
+    - daj zdjęcie ndlib
+\end{frame}
+
+\begin{frame}{\secname}
+    The gap
+
+    There is however a gap in the available tools if we consider more complex network models which
+    have been gaining a popularity in recent years.
+\end{frame}
+
+\begin{frame}{\secname}
+    Our research group also deals with structures like multilayer networks, temporal networks, datastreams etc.
+    Therefore, as a side effect of the research activity, we decided to wrap it up into a reusable 
+    package.
+
+    The major idea for the libarry/framework was to provide a set of extendable interfaces that allows simulating
+    various phenomena within multilayer+temporal networks.
+
+    Our last paper covers that.
+\end{frame}
+
+\section{Key features}
+
+\begin{frame}{\secname}
+    Functionalities of \lstinline[style=py]{network-diffusion}:
+    \begin{itemize}
+        \item end-to-end simulation workflow,
+        \item predefined spreading models,
+        \item an interface for implementing custom spreading models,
+        \item support for the temporal network models (CogSNet + discrete windows),
+        \item support for the multilayer networks,
+        \item centrality measures for multilayer networks.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\secname}
+    Environmental requirements for \lstinline[style=py]{network-diffusion}:
+    \begin{itemize}
+        \item support for Linux, macOS, and Windows\footnote{Although we develop and use it mostly on Unix OSs},
+        \item Python (preferred 3.10) compatibility,
+        \item C snippets,
+        \item NetworkX compatibility.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\secname}
+    To prepare the experiment we have to provide a network, a spreading model and auxiliary parameters.
+    Then, the simulation unfolds as follows:
+    \begin{algorithmic}[1]
+        \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs}}
+        \State \lstinline[style=py]{states_0} $\gets$ \lstinline[style=py]{model.determine_initial_states()}
+        \State \lstinline[style=py]{model.update_network(states_0)} % \Comment{Predefined function in the \texttt{BaseModel} class}
+        \For{\lstinline[style=py]{e} in \lstinline[style=py]{[1, ..., epochs]}}
+        \State \quad \quad \lstinline[style=py]{states_e} $\gets$ \lstinline[style=py]{model.network_evaluation_step(network)}
+        \State \quad \quad \lstinline[style=py]{model.update_network(network, states_e)}
+        \EndFor
+        \State \lstinline[style=py]{logs} $\gets$ generate logs from experiment \\
+        \Return \lstinline[style=py]{logs}
+        \EndProcedure
+    \end{algorithmic}
+\end{frame}
 
 \section{Example I}
 
+\begin{frame}{\secname}
+    A story...
+\end{frame}
+
+\begin{frame}{\secname}
+    \begin{center}
+        \large Let's model this problem with \lstinline[style=py]{network-diffusion}!
+    \end{center}
+\end{frame}
+
 \section{Example II}
+
+\begin{frame}{\secname}
+    A story...
+\end{frame}
+
+\begin{frame}{\secname}
+    \begin{center}
+        \large Let's model this problem with \lstinline[style=py]{network-diffusion}!
+    \end{center}
+\end{frame}
 
 \section{Resources and references}
 
@@ -120,12 +261,6 @@
 \end{frame}
 
 
-% - Slajd tytułowy
-% - Po co network diffusion
-% - Przykład I - ltm
-% - Przykład II - sir+ua
-% - Slajd z linkami do dokumentacji / pypi / githuba
-% - Koniec
 
 
 
@@ -311,3 +446,6 @@
 \addtocounter{framenumber}{1}
 
 \end{document}
+
+
+% nawiązać do pracki damianac
