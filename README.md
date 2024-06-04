@@ -13,3 +13,17 @@ python -m ipykernel install --user --name waw-2024
 ```
 
 To compile presentation use pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023)
+
+
+## Structure of the repository
+
+```bash
+.
+├── README.md
+├── example_i.ipynb   # a basic example of the network_diffusion
+├── example_ii.ipynb  # an advanced example of the network_diffusion
+├── my_experiment     # outdir for example_i.ipynb
+├── networks          # dataset used in example_ii.ipynb
+├── presentation      # LaTeX sources for the presentation
+└── utils             # helper srcipts used in example_ii.ipynb
+```
