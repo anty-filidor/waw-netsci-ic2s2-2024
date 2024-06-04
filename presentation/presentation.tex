@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 \usetheme{Madrid}
-\usecolortheme{default}
+\usecolortheme{seahorse}
 
 % For Polish langage
 \usepackage[T1]{fontenc}
@@ -94,13 +94,14 @@
 \AtEndDocument{
     \addtocounter{framenumber}{-1}
     \begin{frame}[c]
-        \begin{center}
-            \huge Thank you for your attention!
-        \end{center}
+        \centering
+        \begin{huge}
+            Thank you for your attention!
+        \end{huge}
         \begin{figure}
-            \centering
             \includegraphics[width=5cm]{figures/qr_code.png}
         \end{figure}
+        If you like \lstinline[style=py]{network-diffusion} please star the repo :)
     \end{frame}
 }
 
@@ -109,7 +110,7 @@
 \frame{\titlepage}
 
 \begin{frame}{Agenda}
-    In this talk, I will introduce a computational library --- \lstinline[style=py]{network-diffusion}. 
+    In this talk, I will introduce a computational library --- \lstinline[style=py]{network-diffusion}.
     Here is the agenda:
     \tableofcontents
 \end{frame}
@@ -130,16 +131,16 @@
 \end{frame}
 
 \begin{frame}{\secname}
-    Analytical approaches are often insufficient for large graphs, prompting researchers to use 
-    computational methods, i.e. simulations.
-    \begin{center}
+    \onslide<1->{Analytical approaches are often insufficient for large graphs, prompting researchers to use 
+    computational methods, i.e. simulators.}
+    \onslide<2->{\begin{center}
         \vspace{1em}
         \arrowdown
         \vspace{1em}
     \end{center}
     Thus, like in other branches of computer science, there have been developed tools which addres 
     that issue, allowing to avoid starting from scratch and enhancing the reproducibility
-    of results.\footnote{Although network science still ingloriously stands out in this matter.}
+    of results.}
 \end{frame}
 
 \begin{frame}{\secname}
@@ -178,15 +179,15 @@
 \end{frame}
 
 \begin{frame}{\secname}
-    A focus of our research group is oriented i.a. to: multilayer networks,
-    temporal networks, spreading phenomena, data streams.
-    \begin{center}
+    \onslide<1->{A focus of our research group is oriented i.a. to: multilayer networks,
+    temporal networks, spreading phenomena, data streams.}
+    \onslide<2->{\begin{center}
         \arrowdown
     \end{center}
     As a result of our recent activities, we decided to merge and wrap up a code we developed
     into a reusable library. We also decided to to share it with the community in an attempt of
-    filling the gap in.
-    \begin{center}
+    filling the gap in.}
+    \onslide<3->{\begin{center}
         \arrowdown
     \end{center}
     The main operating principles that we determined were:
@@ -195,7 +196,7 @@
         \item development of a tool as a framework with open interfaces,
         \item supporting both multilayer and temporal networks,
         \item supporting spreading models with discrete states.
-    \end{enumerate}
+    \end{enumerate}}
 \end{frame}
 
 \section{Key Features}
@@ -205,7 +206,7 @@
     \vspace{1em}
     \begin{itemize}
         \item end-to-end simulation workflow,
-        \item predefined spreading models,
+        \item predefined spreading models (for multilayer and temporal networks),
         \item an interface for implementing custom spreading models,
         \item support for the temporal network models (CogSNet + discrete windows),
         \item support for the multilayer networks,
@@ -228,7 +229,7 @@
     To prepare the experiment we have to provide a network, a spreading model and auxiliary parameters.
     Then, the simulation unfolds as follows:
     \begin{algorithmic}[1]
-        \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs}}
+        \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs*}}
         \State \lstinline[style=py]{states_0} $\gets$ \lstinline[style=py]{model.determine_initial_states()}
         \State \lstinline[style=py]{model.update_network(states_0)} % \Comment{Predefined function in the \texttt{BaseModel} class}
         \For{\lstinline[style=py]{e} in \lstinline[style=py]{[1, ..., epochs]}}
@@ -260,11 +261,11 @@
     says that the actor can be activated if any of nodes representing it in the network gets activated.
 \end{frame}
 
-\begin{frame}{\subsubsecname}
+\begin{frame}{\secname}
     \begin{figure}
         \centering
         \includegraphics[width=.75\textwidth]{figures/ltm_example_or.pdf}
-        \caption{Propagation according to LTM with the $OR$ protocol in a multilayer network -
+        \caption{Propagation according to LTM with the $OR$ strategy in a multilayer network -
         active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
     \end{figure}
 \end{frame}
@@ -287,14 +288,14 @@
             \begin{table}
             \centering
             \caption{Transition weights with explanation.}
-            \resizebox{1\textwidth}{!}{%
-            \begin{tabular}{c|c|p{4cm}}
-            Symbol & Formula / Value & Description \\ \hline
-            $\alpha$ & $0.19$ & probability of infection for unaware agents \\ \hline
-            $\alpha'$ & $0.35\alpha=0.07$ & probability of infection for aware agents \\ \hline
-            $\beta$ & $0.10$ & probability of recovery \\ \hline
-            $\gamma$ & $0.01$ & probability of awareness for uninfected agents \\ \hline
-            $\delta$& $\gamma + 1 - 0.3$ & probability of awareness for infected agents \\ \hline
+            \resizebox{.7\textwidth}{!}{%
+            \begin{tabular}{c|p{4cm}}
+            Symbol & Description \\ \hline
+            $\alpha$ & probability of infection for unaware agents \\ \hline
+            $\alpha'$ & probability of infection for aware agents \\ \hline
+            $\beta$ & probability of recovery \\ \hline
+            $\gamma$ & probability of awareness for uninfected agents \\ \hline
+            $\delta$& probability of awareness for infected agents \\
             \end{tabular}%
             }
             \end{table}
@@ -302,11 +303,27 @@
         \begin{column}{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\textwidth]{figures/sir_ua.png}
+            \includegraphics[width=\textwidth]{figures/sir_ua.pdf}
             \caption{State and transition graph for SIR-UA.}
         \end{figure}
         \end{column}
       \end{columns}
+\end{frame}
+
+\begin{frame}{\secname}
+    To create an own spreading model, we have to extend the abstract base class
+    (\lstinline[style=py]{nd.models.BaseModel}) by implementing:
+    \begin{itemize}
+        \item a field \lstinline[style=py]{_compartmental_graph},
+        \item a field \lstinline[style=py]{_seed_selector},
+        \item a method \lstinline[style=py]{determine_initial_states},
+        \item a method \lstinline[style=py]{agent_evaluation_step},
+        \item a method \lstinline[style=py]{network_evaluation_step},
+        \item methods \lstinline[style=py]{__str__} and \lstinline[style=py]{get_allowed_states}.
+    \end{itemize}
+    \vspace{1em}
+    The following entities (with implemented method \lstinline[style=py]{update_network}) are
+    utilised in the class \lstinline[style=py]{nd.Simulator} which orchestrates the experiment.
 \end{frame}
 
 \begin{frame}{\secname}
@@ -337,29 +354,13 @@
 \section{Limitations of \lstinline[style=py]{network-diffusion}}
 
 \begin{frame}{\secname}
+    There is still some work to do...
     \begin{itemize}
-        \item \textbf{Python Implementation}
-            \begin{itemize}
-                \item Advantage and drawback due to slower performance.
-            \end{itemize}
-        \item \textbf{Partial C Code}
-            \begin{itemize}
-                \item Some code in C with Python bindings, limited by small team.
-            \end{itemize}
-        \item \textbf{Support for Discrete Spreading}
-            \begin{itemize}
-                \item Limited to discrete spreading processes.
-            \end{itemize}
-        \item \textbf{Framework Design}
-            \begin{itemize}
-                \item Set of interfaces for custom experiments.
-                \item Few pre-defined spreading models compared to NDlib.
-            \end{itemize}
-        \item \textbf{No User Interface}
-            \begin{itemize}
-                \item Not user-friendly for non-programmers.
-                \item Alternatives like NetLogo required.
-            \end{itemize}
+        \item implemented in Python ---  performance can be better (only CogSNet implemented in C),
+        \item limited to discrete spreading models,
+        \item much less pre-defined spreading models than in NDlib,
+        \item no user interface --- a limitation for non-programmers,
+        \item GPL licence.
     \end{itemize}
 \end{frame}
 
