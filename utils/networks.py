@@ -1,3 +1,5 @@
+"""Loaders of networks."""
+
 import network_diffusion as nd
 
 

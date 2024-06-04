@@ -1,25 +1,23 @@
+"""A definition of the model used in the Experiment II."""
+
 from typing import Dict, List, Tuple
 
 import networkx as nx
 import network_diffusion as nd
 import numpy as np
 
-from network_diffusion.models.utils.compartmental import CompartmentalGraph
-
 
 class SIR_UAModel(nd.models.BaseModel):
 
     def __init__(
-            self,
-            alpha: int,
-            beta: int,
-            alpha_prime: int,
-            beta_prime: int,
-            gamma: int,
-            delta: int,
-            epsilon: int,
-            ill_seeds: int,
-            aware_seeds: int,
+        self,
+        alpha: int,
+        alpha_prime: int,
+        beta: int,
+        gamma: int,
+        delta: int,
+        ill_seeds: int,
+        aware_seeds: int,
     ) -> None:
         """
         A model SIR~UA.
@@ -40,32 +38,34 @@ class SIR_UAModel(nd.models.BaseModel):
         and initial %s of infected and aware nodes. 
 
         :param alpha: weight probability of S->I for unaware nodes
-        :param beta: probability of I->R for unaware nodes
         :param alpha_prime: probability of S->I for aware nodes
-        :param beta_prime: probability of I->R for aware nodes
-        :param gamma: probability of U->A for suspected nodes
+        :param beta: probability of I->R for both unaware and aware nodes
+        :param gamma: probability of U->A for both suspected and removed nodes
         :param delta: probability of U->A for ill nodes
-        :param epsilon: probability of U->A for removed nodes
         :param ill_seeds: % of initially I nodes
         :param aware_seeds: % of initially A nodes
         """
         compartments = self._create_compartments(
-            alpha, beta, alpha_prime, beta_prime, gamma, delta, epsilon, ill_seeds, aware_seeds
+            alpha=alpha,
+            alpha_prime=alpha_prime,
+            beta=beta,
+            gamma=gamma,
+            delta=delta,
+            ill_seeds=ill_seeds,
+            aware_seeds=aware_seeds,
         )
         super().__init__(compartments, nd.seeding.RandomSeedSelector())
 
     @staticmethod
     def _create_compartments(
         alpha: int,
-        beta: int,
         alpha_prime: int,
-        beta_prime: int,
+        beta: int,
         gamma: int,
         delta: int,
-        epsilon: int,
         ill_seeds: int,
         aware_seeds: int,
-    ) -> CompartmentalGraph:
+    ) -> nd.models.CompartmentalGraph:
         # define processes, allowed states and initial % of actors in that states
         phenomena = {
             "contagion": [["S", "I", "R"], [100 - ill_seeds, ill_seeds, 0]],
@@ -85,7 +85,7 @@ class SIR_UAModel(nd.models.BaseModel):
 
         # set up weights of transitions for SIR and aware
         cg.set_transition_fast("contagion.S", "contagion.I", ("awareness.A", ), alpha_prime) 
-        cg.set_transition_fast("contagion.I", "contagion.R", ("awareness.A", ), beta_prime)
+        cg.set_transition_fast("contagion.I", "contagion.R", ("awareness.A", ), beta)
 
         # set up weights of transitions for UA and suspected
         cg.set_transition_fast("awareness.U", "awareness.A", ("contagion.S", ), gamma)
@@ -94,7 +94,7 @@ class SIR_UAModel(nd.models.BaseModel):
         cg.set_transition_fast("awareness.U", "awareness.A", ("contagion.I", ), delta)
 
         # set up weights of transitions for UA and removed
-        cg.set_transition_fast("awareness.U", "awareness.A", ("contagion.R", ), epsilon)
+        cg.set_transition_fast("awareness.U", "awareness.A", ("contagion.R", ), gamma)
         
         return cg
 
@@ -182,44 +182,3 @@ class SIR_UAModel(nd.models.BaseModel):
 
     def get_allowed_states(self, net: nd.MultilayerNetwork) -> Dict[str, Tuple[str, ...]]:
         return self._compartmental_graph.get_compartments()
-
-
-def get_ltm():
-    return nd.models.MLTModel(
-        seeding_budget=[95, 5],
-        seed_selector=nd.seeding.RandomSeedSelector(),
-        protocol="AND",
-        mi_value=0.7,
-    )
-
-
-def get_icm():
-    return nd.models.MICModel(
-        seeding_budget=[95, 5, 0],
-        seed_selector=nd.seeding.RandomSeedSelector(),
-        protocol="AND",
-        probability=0.7,
-    )
-
-
-def get_tnem():
-    return nd.models.TemporalNetworkEpistemologyModel(
-        seeding_budget=[95, 5],
-        seed_selector=nd.seeding.RandomSeedSelector(),
-        trials_nr=2,
-        epsilon=0.05,
-    )
-
-
-def get_sirua():
-    return SIR_UAModel(
-        alpha=0.19,
-        beta=0.10,
-        alpha_prime=0.019,
-        beta_prime=0.10,
-        gamma=0.01,
-        delta=0.71,
-        epsilon=0.01,
-        ill_seeds=5,
-        aware_seeds=5,
-    )
