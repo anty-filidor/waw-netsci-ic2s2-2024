@@ -11,7 +11,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[orientation=portrait,size=a0,scale=1.0]{beamerposter}
+\usepackage[orientation=portrait,size=a0,scale=1.25]{beamerposter}
 \usetheme{gemini}
 \usecolortheme{nott}
 \usepackage{graphicx}
@@ -37,8 +37,39 @@
 % for bibliography
 \renewcommand{\refname}{Literature}
 \usepackage[backend=biber]{biblatex}
-\addbibresource{poster.bib} % Replace with your .bib file
+\addbibresource{poster.bib}
 
+% for inline code listings
+\usepackage{listings}
+\usepackage{xparse}
+\usepackage{xcolor}
+\definecolor{codeblue}{rgb}{0.0, 0.0, 1.0}
+\definecolor{codegreen}{rgb}{0.0, 0.5, 0.0}
+\definecolor{codegray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{codepurple}{rgb}{0.58, 0.0, 0.82}
+\definecolor{backcolour}{rgb}{0.95, 0.95, 0.92}
+\lstdefinestyle{py}{
+  language=Python,
+%   backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{codeblue},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\small\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=4,
+  frame=0,
+  rulecolor=\color{black},
+  morekeywords={self, assert, yield, None, True, False}
+}
 
 % ====================
 % Lengths
@@ -96,7 +127,7 @@
 
 \begin{document}
 
-\begin{frame}[t]
+\begin{frame}[t, fragile]
 \begin{columns}[t]
 
 \separatorcolumn
@@ -178,138 +209,106 @@
 \separatorcolumn
 \begin{column}{\colwidth}
 
-\begin{block}{Used data and parameter space}
-    \begin{table}
-    \begin{subtable}[t]{0.45\textwidth}
-        \caption{}
-        \resizebox{\columnwidth}{!}{%
-            \begin{tabular}{lllllp{14cm}}
-                \hline Name & Layers & Actors & Nodes & Edges & Note \\ \hline
-                aucs & 5 & 61 & 224 & 620 & AUCS CS-AARHUS \\
-                ckmp & 3 & 241 & 674 & 1370 & Coleman, Katz, Menzel Innovation Among Physicians \\
-                eutr-A & 37 & 417 & 2034 & 3588 & The European Air Transport Network \\
-                lazega & 3 & 71 & 212 & 1659 & Lazega Law Firm \\ \hline
-                er-2 & 2 & 1000 & 2000 & 5459 & \multirow{3}{*}{\parbox{14cm}{Erdős–Rényi networks generated with multinet library}} \\
-                er-3 & 3 & 1000 & 3000 & 7136 & \\
-                er-5 & 5 & 1000 & 5000 & 15109 & \\ \hline
-                sf-2 & 2 & 1000 & 2000 & 4223 & \multirow{3}{*}{\parbox{14cm}{Scale-free networks generated with multinet library}} \\
-                sf-3 & 3 & 1000 & 3000 & 5010 & \\
-                sf-5 & 5 & 1000 & 5000 & 10181 & \\ \hline
-            \end{tabular}%
-        }
-        \label{tab:networks_eda}
-    \end{subtable}
-    \hspace{\fill}
-    \begin{subtable}[t]{0.45\textwidth}
-        \caption{}
-        \resizebox{\columnwidth}{!}{%
-        \begin{tabular}{lp{10cm}p{10cm}}
-            Protocol & $OR$ & $AND$ \\ \hline
-            $s$ range & $[1, 2, ..., 10, 15, 20, 25, 30]$ & $[15, 20, 25, 30, 31, ..., 40]$ \\ \hline
-            $\mu$ range & \multicolumn{2}{p{20cm}}{$[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]$} \\ \hline
-            networks & \multicolumn{2}{p{20cm}}{real (aucs, ckmp, lazega, eutr-A), Erdős–Rényi (er-2, er-3, er-5), Scale-free (sf-2, sf-3, sf-5)} \\ \hline
-            s.~s.~method & \multicolumn{2}{p{20cm}}{deg-c, greedy, k-sh, k-sh-m, nghb-1s, nghb-2s, p-rnk, p-rnk-m, random, v-rnk, v-rnk-m} \\
-        \end{tabular}%
-        }
-        \label{tab:parameter_space}
-    \end{subtable}
-    \caption{Networks used in experiments with their basic parameters shortlisted (tab.~\ref{tab:networks_eda}), values of each evaluated parameter - in total 27,720 executed experiments (tab.~\ref{tab:parameter_space}).}
-    \end{table}
-\end{block}
+% \begin{block}{Used data and parameter space}
+%     \begin{table}
+%     \begin{subtable}[t]{0.45\textwidth}
+%         \caption{}
+%         \resizebox{\columnwidth}{!}{%
+%             \begin{tabular}{lllllp{14cm}}
+%                 \hline Name & Layers & Actors & Nodes & Edges & Note \\ \hline
+%                 aucs & 5 & 61 & 224 & 620 & AUCS CS-AARHUS \\
+%                 ckmp & 3 & 241 & 674 & 1370 & Coleman, Katz, Menzel Innovation Among Physicians \\
+%                 eutr-A & 37 & 417 & 2034 & 3588 & The European Air Transport Network \\
+%                 lazega & 3 & 71 & 212 & 1659 & Lazega Law Firm \\ \hline
+%                 er-2 & 2 & 1000 & 2000 & 5459 & \multirow{3}{*}{\parbox{14cm}{Erdős–Rényi networks generated with multinet library}} \\
+%                 er-3 & 3 & 1000 & 3000 & 7136 & \\
+%                 er-5 & 5 & 1000 & 5000 & 15109 & \\ \hline
+%                 sf-2 & 2 & 1000 & 2000 & 4223 & \multirow{3}{*}{\parbox{14cm}{Scale-free networks generated with multinet library}} \\
+%                 sf-3 & 3 & 1000 & 3000 & 5010 & \\
+%                 sf-5 & 5 & 1000 & 5000 & 10181 & \\ \hline
+%             \end{tabular}%
+%         }
+%         \label{tab:networks_eda}
+%     \end{subtable}
+%     \hspace{\fill}
+%     \begin{subtable}[t]{0.45\textwidth}
+%         \caption{}
+%         \resizebox{\columnwidth}{!}{%
+%         \begin{tabular}{lp{10cm}p{10cm}}
+%             Protocol & $OR$ & $AND$ \\ \hline
+%             $s$ range & $[1, 2, ..., 10, 15, 20, 25, 30]$ & $[15, 20, 25, 30, 31, ..., 40]$ \\ \hline
+%             $\mu$ range & \multicolumn{2}{p{20cm}}{$[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]$} \\ \hline
+%             networks & \multicolumn{2}{p{20cm}}{real (aucs, ckmp, lazega, eutr-A), Erdős–Rényi (er-2, er-3, er-5), Scale-free (sf-2, sf-3, sf-5)} \\ \hline
+%             s.~s.~method & \multicolumn{2}{p{20cm}}{deg-c, greedy, k-sh, k-sh-m, nghb-1s, nghb-2s, p-rnk, p-rnk-m, random, v-rnk, v-rnk-m} \\
+%         \end{tabular}%
+%         }
+%         \label{tab:parameter_space}
+%     \end{subtable}
+%     \caption{Networks used in experiments with their basic parameters shortlisted (tab.~\ref{tab:networks_eda}), values of each evaluated parameter - in total 27,720 executed experiments (tab.~\ref{tab:parameter_space}).}
+%     \end{table}
+% \end{block}
 
-\begin{block}{Initial results}
-    \begin{figure}
-        \centering
-        \includegraphics[width=.24\textwidth]{figures/robustness_maps/raw_gain_v-rnk-m.pdf}
-        \includegraphics[width=.24\textwidth]{figures/robustness_maps/raw_grad_v-rnk-m.png}
-        \includegraphics[width=.24\textwidth]{figures/robustness_maps/thre_grad_v-rnk-m.png}
-        \includegraphics[width=.24\textwidth]{figures/robustness_maps/rob_map_v-rnk-m.png}
-        \caption{Example of three zones on $G$ heatmap for the \textit{v-rnk-m} method on \textit{aucs} network with protocol \textit{OR}. 
-        (1) a heatmap of the raw gain, (2) computed gradient magnitude,
-        (3) thresholded gradient that divides the area into three sections, and (4) the final division of the $\mu~\times~s~\times~G$ space.}
-        \label{fig:rm_example}
-    \end{figure}
-
-    We observed:
+\begin{block}{Key Features}
     \begin{itemize}
-        \item existence of three areas on the heatmaps (“robust”, “transitional”, and “unrobust”),
-        \item that length of the diffusion is highest in the “transitional” zone,
-        \item for Erdős-Rényi networks the transitional zone is the narrowest,
-        \item for Scale-Free networks transitional zone is typically present,
-        \item for real networks the most significant differences between the $\mu~\times~s~\times~G$ heatmaps.
-    \end{itemize}
-
-\end{block}
-
-\begin{block}{Coarse assessment of seed selection methods}
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\linewidth]{figures/means_multilayer.png}
-        \caption{Heatmaps of mean $G$ achieved by evaluated seed 
-        selection methods on multilayer networks. \textbf{Left:} protocol 
-        $OR$. \textbf{Right:} protocol $AND$.}
-        \label{fig:mean_gain_mln}
-    \end{figure}
-    We observed:
-    \begin{itemize}
-        \item network type impacts the $G$, surpassing the influence of seed selection methods,
-        \item $random$ and $greedy$ stand out of the another methods.
-        \item network topology strongly affects efficiency of MLTM diffusion (more layers lead to better $G$ for $OR$, whereas worse $G$ for $AND$),
-        \item most of the evaluated methods behave similarly regarding the network for which they are applied.
+        \item \textbf{End-to-End Simulation Workflow}: The library enables users 
+        to simulate diffusion processes in complex networks with ease. Whether
+        you are studying information spread, disease propagation, or any other
+        diffusion phenomena, this library has you covered.
+        \item \textbf{Support for Temporal Network Models}: You can work with temporal models, allowing you to
+        capture the dynamics of processes over time. These temporal models can be
+        created using regular time windows or leverage \textbf{CogSnet}.
+        \item \textbf{Support for Multilayer Network Models}: The library supports multilayer networks, which are
+        essential for modelling real-world systems with interconnected layers of
+        complexity
+        \item \textbf{Predefined Spreading Models}: You have the option to use predefined diffusion 
+        models such as the Linear Threshold Model, Independent Cascade Model, and more. Those are
+        implemented to simplify the simulation process, allowing users to focus on their specific
+        research questions.
+        \item \textbf{An Interface for Implementing Custom Spreading Models}: Additionally, 
+        \lstinline[style=py]{network-diffusion} allows you to define your own diffusion models using
+        open interfaces, providing flexibility for researchers to tailor simulations to their unique
+        requirements.
+        \item \textbf{New Centrality Measures}: The library provides a wide range of centrality 
+        measures specifically designed for multilayer networks. These measures can be valuable for
+        selecting influential seed nodes in diffusion processes.
+        \item \textbf{NetworkX Compatibility}: The package is built on top of  
+        \lstinline[style=py]{networkx}, ensuring seamless compatibility with this popular Python 
+        library for network analysis. You can easily integrate it into your existing
+        \lstinline[style=py]{networkx}-based workflows.
     \end{itemize}
 \end{block}
 
-\begin{block}{Rankings of seed selection methods}
-    \begin{table}
-    \begin{subtable}{0.45\textwidth}
-        \caption{}
-        \resizebox{\columnwidth}{!}{%
-        \begin{tabular}{ccccc}
-            Seed Selection Method & \multicolumn{4}{c}{Networks} \\
-            & Real & Erdős–Rényi & Scale-free & All \\ \hline
-            deg-c & 3.12 & 4.57 & 5.55 & 4.28 \\
-            greedy & \textbf{1.33} & \multicolumn{3}{c}{not computed}\\
-            k-sh    & 5.46 & 4.82 & 7.95 & 6.02 \\
-            k-sh-m  & 4.58 & 4.63 & 6.31 & 5.11 \\
-            nghb-2s & 4.14 & 5.44 & 6.53 & 5.25 \\
-            nghb-1s & 2.91 & 4.22 & 5.18 & 3.99 \\
-            p-rnk   & 3.05 & 3.60 & 5.02 & 3.81 \\
-            p-rnk-m & 3.87 & 3.94 & 6.51 & 4.68 \\
-            random  & 5.23 & 5.42 & 6.74 & 5.74 \\
-            v-rnk   & 3.93 & 3.08 & 4.36 & 3.80 \\
-            v-rnk-m & 2.11 & \textbf{3.04} & \textbf{2.85} & \textbf{2.61} \\ \hline
-        \end{tabular}%
-        }
-        \label{tab:ranking_or_mln}
-    \end{subtable}
-    \hspace{\fill}
-    \begin{subtable}{0.45\textwidth}
-        \caption{}
-        \resizebox{\columnwidth}{!}{%
-        \begin{tabular}{ccccc}
-        Seed Selection Method & \multicolumn{4}{c}{Networks} \\
-        & Real & Erdős–Rényi & Scale-free & All \\ \hline
-        deg-c &  2.57 & 3.20 & \textbf{2.90} & 2.86 \\
-        greedy & \textbf{1.03} & \multicolumn{3}{c}{not computed}\\
-        k-sh    & 2.67 & 3.20 & 3.69 & 3.13 \\
-        k-sh-m  & 3.03 & 3.23 & 3.18 & 3.13 \\
-        nghb-2s & 3.31 & 3.93 & 4.26 & 3.78 \\
-        nghb-1s & 2.72 & 3.43 & 3.67 & 3.22 \\
-        p-rnk   & 2.31 & 2.83 & 3.04 & 2.69 \\
-        p-rnk-m & 2.57 & 2.98 & 3.54 & 2.99 \\
-        random  & 3.44 & 4.55 & 4.54 & 4.10  \\
-        v-rnk   & 2.62 & \textbf{2.34} & 2.92 & \textbf{2.62} \\
-        v-rnk-m & 2.35 & 3.53 & 3.49 & 3.05 \\ \hline
-        \end{tabular}%
-        }
-        \label{tab:ranking_and_mln}
-    \end{subtable}
-    \caption{Rankings of seed selection methods with respect to the achieved $G$ for protocols $OR$ (tab.~\ref{tab:ranking_or_mln}) and $AND$ tab.~\ref{tab:ranking_and_mln}) grouped by graph type (the higher number the better).}
-    \label{tab:ranking_mln}
-    \end{table}
-\end{block}
+\begin{alertblock}{A Short Example}
+\begin{lstlisting}[style=py, basicstyle=\footnotesize\ttfamily]
+import network_diffusion as nd
+
+# define the model with its internal parameters
+spreading_model = nd.models.MICModel(
+    seeding_budget=[90, 10, 0],  # 95% act suspected, 10% infected, 0% recovered
+    seed_selector=nd.seeding.RandomSeedSelector(),  # pick infected act randomly
+    protocol="OR",  # how to aggregate impulses from the network's layers
+    probability=0.5,  # probability of infection
+)
+
+# get the graph - a medium for spreading
+network = nd.mln.functions.get_toy_network_piotr()
+
+# perform the simulation that lasts four epochs
+simulator = nd.Simulator(model=spreading_model, network=network)
+logs = simulator.perform_propagation(n_epochs=3)
+
+# obtain detailed logs for each actor in the form of JSON
+raw_logs_json = logs.get_detailed_logs()
+
+# or obtain aggregated logs for each of the network's layer
+aggregated_logs_json = logs.get_aggragated_logs()
+
+# or just save a summary of the experiment with all the experiment's details
+logs.report(visualisation=True, path="my_experiment")
+\end{lstlisting}
+\end{alertblock}
     
-\begin{exampleblock}{Conclusions}
+\begin{exampleblock}{Try \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
     \begin{itemize}
         \item we confirmed that efficiency of centrality based heuristics is located between \textit{random} and \textit{greedy},
         \item we have proposed an extension of VoteRank, PageRank and k-shell to multilayer networks,
@@ -319,8 +318,6 @@
 \end{exampleblock}
 
 \begin{block}{References}
-    % \nocite{*}
-    % \footnotesize{\bibliographystyle{ieeetr}\bibliography{poster}}
     \printbibliography
 \end{block}
 
