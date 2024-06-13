@@ -54,7 +54,8 @@ class SIR_UAModel(nd.models.BaseModel):
             ill_seeds=ill_seeds,
             aware_seeds=aware_seeds,
         )
-        super().__init__(compartments, nd.seeding.RandomSeedSelector())
+        self.__comp_graph = compartments
+        self.__seed_selector = nd.seeding.RandomSeedSelector()
 
     @staticmethod
     def _create_compartments(
@@ -98,10 +99,20 @@ class SIR_UAModel(nd.models.BaseModel):
         
         return cg
 
+    @property
+    def _compartmental_graph(self) -> nd.models.CompartmentalGraph:
+        """Compartmental model that defines allowed transitions and states."""
+        return self.__comp_graph
+
+    @property
+    def _seed_selector(self) -> nd.seeding.RandomSeedSelector:
+        """A method of selecting seed agents."""
+        return self.__seed_selector
+
     def __str__(self) -> str:
         descr = f"{nd.utils.BOLD_UNDERLINE}\n"
         descr += f"SIR-UA Model\n"
-        descr += self._compartmental_graph.describe()
+        descr += self._compartmental_graph.__str__()
         descr += str(self._seed_selector)
         return descr
 
