@@ -100,8 +100,8 @@
     Piotr Br{\'o}dka \inst{1}
 }
 \institute{
-  \inst{1} Wroc{\l}aw University of Science and Technology\\
-  \inst{2} University of Technology Sydney
+  \inst{1} Wroc{\l}aw University of Science and Technology, PL, EU\\
+  \inst{2} University of Technology Sydney, NSW, AU
 }
 
 % ====================
@@ -110,7 +110,7 @@
 
 \footercontent{
   \href{https://networks.pwr.edu.pl/}{https://networks.pwr.edu.pl} \hfill
-  NetSci, Canada, July 2023 \hfill
+  NetSci, Canada, June 2024 \hfill
   \href{mailto:michal.czuba@pwr.edu.pl}{michal.czuba@pwr.edu.pl}}
 
 % ====================
@@ -133,15 +133,19 @@
 \begin{column}{\colwidth}
 
 \begin{block}{Introduction}
-    Spreading phenomena are one of the issues considered by a network science. They can be obeserved
-    in various areas like: dynamics of political opinions, marketing campaigns, spread of epidemics,
-    etc. With the advancement of network science analytical approaches became insufficient for large
-    graphs, prompting researchers to use computational methods. In recent years, the scope of network science has significantly expanded beyond static graphs to encompass more complex structures. The introduction of streaming, temporal, multilayer, and hypernetwork approaches has brought new possibilities and imposed additional requirements. Unfortunately, the pace of advancement is often
-    too rapid for existing computational packages to keep up with the functionality updates...
+    Spreading phenomena are one of the issues considered by network science. They can be observed in
+    various areas, such as dynamics of political opinions, marketing campaigns, spread of epidemics,
+    etc. With the advancement of network science, analytical approaches have become insufficient for
+    large graphs, prompting researchers to use computational methods. Moreover, recent years brought
+    a significant expansion of the scope of network science beyond static graphs to encompass more
+    complex structures. The introduction of streaming, temporal, multilayer, and hypernetwork
+    approaches has brought new possibilities and imposed additional requirements. Unfortunately, the
+    pace of advancement is often too rapid for existing computational packages to keep up with the
+    functionality updates.
 \end{block}
 
-\begin{alertblock}{Problem}
-    There is a bunch of very good and robust tools that helps in sumulating diffusion processes in 
+\begin{block}{Problem}
+    There are many very good and efficient tools that help in simulating diffusion processes in
     networks, e.g. \lstinline[style=py]{ndlib} (which we love). \\
     \vspace{2em}
     However, if we consider...\\
@@ -151,13 +155,13 @@
     \hspace{5em}...spreading multiple processes at the same time... \\
     \vspace{1em}
     \hspace{14em}...\textbf{a gap among the available toolkits} emerges.
-\end{alertblock}
+\end{block}
 
-\begin{block}{Our Contribution}
-    In order to address the issue, we decided to redesign, polish, and share our internal 
-    environment which we are using in the lab. Thus, in our recent work~\cite{czuba2024networkdiffusion},
-    we presented \lstinline[style=py]{network-diffusion}. To start using the library just type in 
-    your shell:
+\begin{alertblock}{Our Contribution}
+    In order to address the issue, we decided to redesign, polish, and share the simulation 
+    environment we are internally using in the lab. Thus, in our recent
+    work~\cite{czuba2024networkdiffusion}, we presented \lstinline[style=py]{network-diffusion}.
+    To start using the library, just type in your shell:
     \begin{center}
         \large
         \begin{verbatim}
@@ -165,37 +169,36 @@
         \end{verbatim}
     \end{center}
     \vspace{-1em}
-    Or scan this code to reach the docs with more examples:
+    Or scan this QR code to reach the docs with more examples:
     \begin{figure}
-        \includegraphics[width=15cm]{../presentation/figures/qr_code.pdf}
+        \includegraphics[width=15cm]{../presentation/figures/qr_code2.pdf}
     \end{figure}
-\end{block}
+\end{alertblock}
 
 \begin{block}{Key Features of \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
     \begin{itemize}
-        \item \textbf{End-to-End Simulation Workflow}
+        \item \textbf{End-to-End Simulation Workflow for Discrete Diffusion Phenomena}
         \item \textbf{Support for Temporal Network Models}
         \item \textbf{Support for Multilayer Network Models}
         \item \textbf{A Bunch of Predefined Spreading Models}
         \item \textbf{An Interface for Implementing Custom Spreading Models}
         \item \textbf{New Centrality Measures}
-        \item \textbf{NetworkX Compatibility}
+        \item \textbf{\lstinline[style=py, basicstyle=\large\ttfamily]{networkx} Compatibility}
     \end{itemize}
 \end{block}
 
-% \begin{exampleblock}{Example --- Linear Threshold Model in Multilayer Networks}
 \begin{exampleblock}{Example}
     \heading{Linear Threshold Model in Multilayer Networks}
-    In a diffusion under Linear Threshold Model, each node:
+    In a diffusion under the Linear Threshold Model (LTM), each node:
     \begin{itemize}
         \item can fall in two states: \textit{active} and \textit{inactive},
         \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all 
-        neighbours exceeds certain threshold ($\mu$).
+        neighbours exceeds a certain threshold ($\mu$).
     \end{itemize}
-    In case of multilayer networks --- actors are the subject of the process, while the 
+    In the case of multilayer networks --- actors are the subject of the process, while the 
     nodes are their auxiliary representation. Thus, we have to define how to aggregate impulses 
-    from the layers. In this example we will consider $OR$ strategy (aka protocol) which says that
-    the actor can be activated if any of nodes representing it gets activated.
+    from the layers. In this example, we will consider $OR$ strategy (aka protocol), which says that
+    the actor can be activated if any of the nodes representing it gets activated.
 \end{exampleblock}
 
 \end{column}
@@ -206,15 +209,15 @@
 \begin{exampleblock}{Example}
 
 \heading{Scenario to Simulate}
-A Figure below shows the case we would like to model with \lstinline[style=py]{network-diffusion} 
---- MLTM with homogeneous threshold $\mu=0.3$ and protocol $OR$. The process will diffuse in a
-network with eleven actors, starting from the agent six and ten.
+The Figure below shows the case we would like to model with \lstinline[style=py]{network-diffusion} 
+--- mLTM with homogeneous threshold $\mu=0.3$ and protocol $OR$. The process will diffuse in a
+network with eleven actors, starting from the agents six and ten.
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{../presentation/figures/ltm_example_or.pdf}
 \end{figure}
 
-\heading{Modelling this case with \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
+\heading{Modelling it with \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
 
 \begin{lstlisting}[style=py, basicstyle=\footnotesize\ttfamily]
 import network_diffusion as nd
@@ -252,26 +255,20 @@ logs.report(visualisation=True, path="my_experiment")
 
 \heading{Outcomes}
 
-The output logs can be used for further analysis and contain:
-% \begin{itemize}
-%     \item a description of the network,
-%     \item a description of the propagation model,
-%     \item a report of the spreading for all simulated phenomena,
-%     \item a capture of states of each node during the simulation,
-%     \item a brief visualisation of the propagation.
-% \end{itemize}
-% .. figure:: images/experiment_vis.png
-%     :width: 600
+The output logs contain a description of the network and the propagation model, a report of the
+spreading for all simulated phenomena, a capture of the states of each node during the simulation,
+and a brief visualisation of the propagation. They can be easily composed into subsequent data
+analysis pipelines.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.395\textwidth}
+    \begin{subfigure}[b]{0.36\textwidth}
         \centering
-        \fbox{\includegraphics[width=\textwidth]{figures/output.png}}
+        \includegraphics[width=\textwidth]{figures/output.png}
     \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
+    \begin{subfigure}[b]{0.43\textwidth}
         \centering
-        \fbox{ \includegraphics[width=\textwidth]{figures/visualisation.png}}
+        \includegraphics[width=\textwidth]{figures/visualisation.png}
     \end{subfigure}
     % \caption{kkk}
 \end{figure}
