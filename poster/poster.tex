@@ -89,8 +89,8 @@
 % ====================
 
 % Title page
-\title{Network Diffusion --- Framework to Simulate Spreading Processes in Complex Networks}
-\author{
+\title{\Large Network Diffusion --- Framework to Simulate Spreading Processes in Complex Networks}
+\author{\large
     \textbf{Micha{\l} Czuba} \inst{1},
     Mateusz Nurek \inst{1},
     Damian Serwata \inst{1},
@@ -118,8 +118,8 @@
 % Logo (optional)
 % ====================
 
-\logoright{\includegraphics[height=3.8cm]{logos/nsl-white.pdf}}
-\logoleft{\includegraphics[height=3.8cm]{logos/wust_logo.pdf}}
+\logoright{\includegraphics[height=4cm]{logos/nsl-white.pdf}}
+\logoleft{\includegraphics[height=4cm]{logos/wust_logo.pdf}}
 
 % ====================
 % Body
@@ -134,8 +134,81 @@
 \begin{column}{\colwidth}
 
 \begin{block}{Introduction}
-    The problem of selecting an optimal seed set to maximise influence in networks has been a subject of intense research in recent years. However, there is still a missing part to be tackled: \textbf{multilayer networks}. Methods robust for one-layer-graphs are not easily applicable to their multilayer counterparts. That narrows their usability in real-case scenarios such as marketing campaigns, misinformation tracking, or epidemiology, where multilayer networks usually express actual conditions better. \textbf{In this work, we show the efficiency of various metrics used to determine the initial seed set for the Multilayer Linear Threshold Model} (MLTM).
+    Spreading phenomena are one of the issues considered by a network science. They can be obeserved
+    in various areas like: dynamics of political opinions, marketing campaigns, spread of epidemics,
+    computer viruses, etc. With the advancement of computational network science analytical 
+    approaches became insufficient for large graphs, prompting researchers to use computational
+    methods. In recent years, the scope of network science has significantly expanded beyond static
+    graphs to encompass more complex structures. The introduction of streaming, temporal, multilayer,
+    and hypernetwork approaches has brought new possibilities and imposed additional requirements.
+    Unfortunately, the pace of advancement is often too rapid for existing computational packages to
+    keep up with the functionality updates...
 \end{block}
+
+\begin{alertblock}{Problem}
+    There is a bunch of very good and robust tools that helps in sumulating diffusion processes in 
+    networks, e.g. \lstinline[style=py]{ndlib} (which we love). \\
+    \vspace{2em}
+    However, if we consider...\\
+    \vspace{1em}
+    \hspace{5em}...more complex network models,... \\
+    \vspace{1em}
+    \hspace{5em}...spreading multiple processes at the same time... \\
+    \vspace{1em}
+    \hspace{14em}...\textbf{a gap among the available toolkits} emerges.
+\end{alertblock}
+
+\begin{block}{Our Contribution}
+    In order to address the issue, we decided to redesign, polish, and share our internal 
+    environment which we are using in the lab. Thus, we present
+    \lstinline[style=py]{network-diffusion}. To start using library just type in your shell:
+    \begin{center}
+        \large
+        \begin{verbatim}
+            pip install network-diffusion
+        \end{verbatim}
+    \end{center}
+    \vspace{-1em}
+    Or scan this code to reach the docs with more examples:
+    \begin{figure}
+        \includegraphics[width=15cm]{../presentation/figures/qr_code.pdf}
+    \end{figure}
+\end{block}
+
+\begin{block}{Key Features}
+    \begin{itemize}
+        \item \textbf{End-to-End Simulation Workflow}: The library enables users 
+        to simulate diffusion processes in complex networks with ease. Whether
+        you are studying information spread, disease propagation, or any other
+        diffusion phenomena, this library has you covered.
+        \item \textbf{Support for Temporal Network Models}: You can work with temporal models, allowing you to
+        capture the dynamics of processes over time. These temporal models can be
+        created using regular time windows or leverage \textbf{CogSnet}.
+        \item \textbf{Support for Multilayer Network Models}: The library supports multilayer networks, which are
+        essential for modelling real-world systems with interconnected layers of
+        complexity
+        \item \textbf{Predefined Spreading Models}: You have the option to use predefined diffusion 
+        models such as the Linear Threshold Model, Independent Cascade Model, and more. Those are
+        implemented to simplify the simulation process, allowing users to focus on their specific
+        research questions.
+        \item \textbf{An Interface for Implementing Custom Spreading Models}: Additionally, 
+        \lstinline[style=py]{network-diffusion} allows you to define your own diffusion models using
+        open interfaces, providing flexibility for researchers to tailor simulations to their unique
+        requirements.
+        \item \textbf{New Centrality Measures}: The library provides a wide range of centrality 
+        measures specifically designed for multilayer networks. These measures can be valuable for
+        selecting influential seed nodes in diffusion processes.
+        \item \textbf{NetworkX Compatibility}: The package is built on top of  
+        \lstinline[style=py]{networkx}, ensuring seamless compatibility with this popular Python 
+        library for network analysis. You can easily integrate it into your existing
+        \lstinline[style=py]{networkx}-based workflows.
+    \end{itemize}
+\end{block}
+
+\end{column}
+
+\separatorcolumn
+\begin{column}{\colwidth}
 
 \begin{alertblock}{Extending the LTM to multilayer networks}
     Linear Threshold Model in its initial form~\cite{kempe2003maximizing} cannot be directly applied to multilayer networks --- \textbf{actors are the subject of the process, while the nodes are their auxiliary representation}...
@@ -204,10 +277,7 @@
     We used two ideas to adapt PageRank, VoteRank, and k-shell to multilayer networks: compute the metric for each layer and take its mean value for each actor (e.g. \textit{p-rnk}) or replace Degree Centrality with Neighbourhood Size in the algorithm (e.g. \textit{p-rnk-m}).
 \end{block}
 
-\end{column}
 
-\separatorcolumn
-\begin{column}{\colwidth}
 
 % \begin{block}{Used data and parameter space}
 %     \begin{table}
@@ -248,35 +318,7 @@
 %     \end{table}
 % \end{block}
 
-\begin{block}{Key Features}
-    \begin{itemize}
-        \item \textbf{End-to-End Simulation Workflow}: The library enables users 
-        to simulate diffusion processes in complex networks with ease. Whether
-        you are studying information spread, disease propagation, or any other
-        diffusion phenomena, this library has you covered.
-        \item \textbf{Support for Temporal Network Models}: You can work with temporal models, allowing you to
-        capture the dynamics of processes over time. These temporal models can be
-        created using regular time windows or leverage \textbf{CogSnet}.
-        \item \textbf{Support for Multilayer Network Models}: The library supports multilayer networks, which are
-        essential for modelling real-world systems with interconnected layers of
-        complexity
-        \item \textbf{Predefined Spreading Models}: You have the option to use predefined diffusion 
-        models such as the Linear Threshold Model, Independent Cascade Model, and more. Those are
-        implemented to simplify the simulation process, allowing users to focus on their specific
-        research questions.
-        \item \textbf{An Interface for Implementing Custom Spreading Models}: Additionally, 
-        \lstinline[style=py]{network-diffusion} allows you to define your own diffusion models using
-        open interfaces, providing flexibility for researchers to tailor simulations to their unique
-        requirements.
-        \item \textbf{New Centrality Measures}: The library provides a wide range of centrality 
-        measures specifically designed for multilayer networks. These measures can be valuable for
-        selecting influential seed nodes in diffusion processes.
-        \item \textbf{NetworkX Compatibility}: The package is built on top of  
-        \lstinline[style=py]{networkx}, ensuring seamless compatibility with this popular Python 
-        library for network analysis. You can easily integrate it into your existing
-        \lstinline[style=py]{networkx}-based workflows.
-    \end{itemize}
-\end{block}
+
 
 \begin{alertblock}{A Short Example}
 \begin{lstlisting}[style=py, basicstyle=\footnotesize\ttfamily]
@@ -308,14 +350,20 @@ logs.report(visualisation=True, path="my_experiment")
 \end{lstlisting}
 \end{alertblock}
     
-\begin{exampleblock}{Try \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
-    \begin{itemize}
-        \item we confirmed that efficiency of centrality based heuristics is located between \textit{random} and \textit{greedy},
-        \item we have proposed an extension of VoteRank, PageRank and k-shell to multilayer networks,
-        \item for both protocols VoteRank is the most efficient method,
-        \item in real case scenarios, it could be better to make the $\mu$ smaller (i.e. invest in a mass marketing) than to put efforts in selecting the optimal $S_{0}$ (i.e. conduct the campaign with influencers).
-    \end{itemize}
-\end{exampleblock}
+% \begin{exampleblock}{Try the Library}
+%     To start using library just type in your shell:
+%     \begin{center}
+%         \large
+%         \begin{verbatim}
+%             pip install network-diffusion
+%         \end{verbatim}
+%     \end{center}
+%     \vspace{-1em}
+%     Or scan this code to reach the docs with more examples:
+%     \begin{figure}
+%         \includegraphics[width=10cm]{../presentation/figures/qr_code.pdf}
+%     \end{figure}
+% \end{exampleblock}
 
 \begin{block}{References}
     \printbibliography
