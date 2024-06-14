@@ -37,7 +37,7 @@
 % for bibliography
 \renewcommand{\refname}{Literature}
 \usepackage[backend=biber]{biblatex}
-\addbibresource{poster.bib}
+\addbibresource{../presentation/references.bib}
 
 % for inline code listings
 \usepackage{listings}
@@ -49,26 +49,26 @@
 \definecolor{codepurple}{rgb}{0.58, 0.0, 0.82}
 \definecolor{backcolour}{rgb}{0.95, 0.95, 0.92}
 \lstdefinestyle{py}{
-  language=Python,
-%   backgroundcolor=\color{backcolour},
-  commentstyle=\color{codegreen},
-  keywordstyle=\color{codeblue},
-  numberstyle=\tiny\color{codegray},
-  stringstyle=\color{codepurple},
-  basicstyle=\small\ttfamily,
-  breakatwhitespace=false,
-  breaklines=true,
-  captionpos=b,
-  keepspaces=true,
-  numbers=left,
-  numbersep=5pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  tabsize=4,
-  frame=0,
-  rulecolor=\color{black},
-  morekeywords={self, assert, yield, None, True, False}
+    language=Python,
+    %  backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\small\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=0,
+    rulecolor=\color{black},
+    morekeywords={self, assert, yield, None, True, False}
 }
 
 % ====================
@@ -100,7 +100,7 @@
     Rados{\l}aw Michalski \inst{1},
     Piotr Br{\'o}dka \inst{1}
 }
-\institute[]{
+\institute{
   \inst{1} Wroc{\l}aw University of Science and Technology\\
   \inst{2} University of Technology Sydney
 }
@@ -160,8 +160,9 @@
 
 \begin{block}{Our Contribution}
     In order to address the issue, we decided to redesign, polish, and share our internal 
-    environment which we are using in the lab. Thus, we present
-    \lstinline[style=py]{network-diffusion}. To start using library just type in your shell:
+    environment which we are using in the lab. Thus, in our recent work~\cite{czuba2024networkdiffusion},
+    we presented \lstinline[style=py]{network-diffusion}. To start using the library just type in 
+    your shell:
     \begin{center}
         \large
         \begin{verbatim}
@@ -210,117 +211,55 @@
 \separatorcolumn
 \begin{column}{\colwidth}
 
-\begin{alertblock}{Extending the LTM to multilayer networks}
-    Linear Threshold Model in its initial form~\cite{kempe2003maximizing} cannot be directly applied to multilayer networks --- \textbf{actors are the subject of the process, while the nodes are their auxiliary representation}...
-    Therefore, we need to define:
+\begin{alertblock}{Example}
+
+    \heading{Extending Linear Threshold Model to multilayer Networks}
+    In a diffusion under Linear Threshold Model~\cite{kempe2003maximizing}, each node:
     \begin{itemize}
-        \item what does it mean that an actor is (or is not) active,
-        \item how does it relate to diffusion dynamics taking place within 
-        layers, where it is represented.
+        \item can fall in two states: \textit{active} and \textit{inactive},
+        \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all 
+        neighbours exceeds certain threshold ($\mu$).
     \end{itemize}
-    In our research, we used the approach proposed by~\cite{zhong2022mltm} with amendments so that a homogeneity among actors has been imposed in the sense of an activation threshold ($\mu$) and a protocol (v.i.).
+    In case of multilayer networks --- \textbf{actors are the subject of the process, while the 
+    nodes are their auxiliary representation}. Thus, we have to define how to aggregate impulses 
+    from the layers. In this example we will consider method introduced by~\cite{zhong2022mltm} --- 
+    a protocol functions, namely "OR" variant which says that the actor can be activated if any of 
+    nodes representing it gets activated.
 
-    \heading{Protocol function in MLTM}\label{def:proto}
-        According to~\cite{zhong2022mltm}, state of the actor $n$ of a multilayer network $M = (N, L, V, E)$ in the time step $t$ is determined
-        by a following function: 
-        \begin{equation*}
-            x_{n}(t) =
-            \begin{cases}
-              1,  & \text{if \space} y_{n}(t) \geq \delta \text{\space or 
-                \space} x_{n}(t-1) = 1 \\
-              0,  & \text{otherwise}
-            \end{cases} 
-        \end{equation*}
-        Where:
-        \begin{description}
-            \item[$\delta$] - a parameter of the model, $\delta \in [\frac{1}{|L|}, 1]$,
-            \item[$y_{n}(t)$] - a mean input of actor $n$ (represented in $K$ layers) in time $t$, $y_{n}(t) = |K|^{-1} \sum_{k \in K} y_{v}^{k}(t)$.
-            \item[$y_{v}^{k}(t)$] - an impulse of node $v$ from layer $k$ in time $t$, $y_{v}^{k}(t) \in \{0, 1\}$
-        \end{description}
-
-    \heading{Toy example}
-    \textbf{We decided to examine two extreme cases: $\mathbf{\delta = 1}$ ($\mathbf{AND}$) and $\mathbf{delta = \frac{1}{L}}$ ($\mathbf{OR}$)}. In the former one, an actor gets activated if it receives sufficient influence on all layers where it is represented, and conversely the latter, where sufficient input in at least one layer is enough for activation.
+    \heading{Visualisation}
     \begin{figure}
         \centering
         \includegraphics[width=1\linewidth]{figures/ltm_example.pdf}
         \caption{Example of spreading of MLTM in toy network with protocol $AND$.}
         \label{fig:ltm_example_and}
     \end{figure}
-\end{alertblock}
+% \end{alertblock}
 
-\begin{block}{A problem we tackled}
-    \heading{Budget constrained influence maximisation}
-    Let $\mathcal{S}$ be a family of sets of cardinality $s$ over actors of
-    the multilayer network $M$ in the sense that $\mathcal{S} \subseteq
-    powerset(N)$. Let $\sigma: \mathcal{S} \rightarrow \mathbb{R^{+}}$ b
-    an arbitrary function that maps a set of actors used as a seed set to
-    a number denoting the expected size of activated actors in a binary discrete system. An influence maximisation problem for seeding budget of size $s$ is an issue of finding $ S_{0}: \arg\max(\sigma) = S_{0} \wedge |S_{0}| \leq s$.
-    
-    \heading{Measuring an efficiency of the diffusion}
-    We used \textbf{Gain} metric to assess a performance of the spreading model that bases on a number of seeds, a number of actors that could be activated, and a number of active actors when diffusion faded down:
-    \begin{equation*}
-        G = 100 \cdot \frac{|S_{D} - S_{0}|}{|N - S_{0}|}
-    \end{equation*}
-\end{block}
-
-\begin{block}{Seed selection methods}
-    During the study, we evaluated the following methods to select seed set for MLTM:
-    \begin{itemize}
-        \item degree (\textit{deg-c)},
-        \item neighbourhood size (\textit{nghb-1s}, \textit{nghb-2s}),
-        \item PageRank (\textit{p-rnk}, \textit{p-rnk-m}),
-        \item VoteRank (\textit{v-rnk}, \textit{v-rnk-m}),
-        \item k-shell decomposition (\textit{k-sh}, \textit{k-sh-m}),
-        \item random choice (\textit{random}),
-        \item greedy (\textit{greedy}).
-    \end{itemize}
-    We used two ideas to adapt PageRank, VoteRank, and k-shell to multilayer networks: compute the metric for each layer and take its mean value for each actor (e.g. \textit{p-rnk}) or replace Degree Centrality with Neighbourhood Size in the algorithm (e.g. \textit{p-rnk-m}).
-\end{block}
+% \begin{alertblock}{A Short Example}
 
 
+% \begin{block}{Linear Threshold Model}
+%     Each node:
+%     \begin{itemize}
+%         \item can fall in two states: \textit{active} and \textit{inactive},
+%         \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all neighbours
+%         exceeds certain threshold.
+%     \end{itemize}
+%     \end{block}
+%     In case of multilayer networks the actors not the nodes\footnote{which can be considered as avatars
+%     of the actors on the network's layers} are a subject of the diffusion. Thus, we have to define
+%     how to aggregate impulses from the layers. In this example we will consider "OR" strategy, which 
+%     says that the actor can be activated if any of nodes representing it in the network gets activated.
 
-% \begin{block}{Used data and parameter space}
-%     \begin{table}
-%     \begin{subtable}[t]{0.45\textwidth}
-%         \caption{}
-%         \resizebox{\columnwidth}{!}{%
-%             \begin{tabular}{lllllp{14cm}}
-%                 \hline Name & Layers & Actors & Nodes & Edges & Note \\ \hline
-%                 aucs & 5 & 61 & 224 & 620 & AUCS CS-AARHUS \\
-%                 ckmp & 3 & 241 & 674 & 1370 & Coleman, Katz, Menzel Innovation Among Physicians \\
-%                 eutr-A & 37 & 417 & 2034 & 3588 & The European Air Transport Network \\
-%                 lazega & 3 & 71 & 212 & 1659 & Lazega Law Firm \\ \hline
-%                 er-2 & 2 & 1000 & 2000 & 5459 & \multirow{3}{*}{\parbox{14cm}{Erdős–Rényi networks generated with multinet library}} \\
-%                 er-3 & 3 & 1000 & 3000 & 7136 & \\
-%                 er-5 & 5 & 1000 & 5000 & 15109 & \\ \hline
-%                 sf-2 & 2 & 1000 & 2000 & 4223 & \multirow{3}{*}{\parbox{14cm}{Scale-free networks generated with multinet library}} \\
-%                 sf-3 & 3 & 1000 & 3000 & 5010 & \\
-%                 sf-5 & 5 & 1000 & 5000 & 10181 & \\ \hline
-%             \end{tabular}%
-%         }
-%         \label{tab:networks_eda}
-%     \end{subtable}
-%     \hspace{\fill}
-%     \begin{subtable}[t]{0.45\textwidth}
-%         \caption{}
-%         \resizebox{\columnwidth}{!}{%
-%         \begin{tabular}{lp{10cm}p{10cm}}
-%             Protocol & $OR$ & $AND$ \\ \hline
-%             $s$ range & $[1, 2, ..., 10, 15, 20, 25, 30]$ & $[15, 20, 25, 30, 31, ..., 40]$ \\ \hline
-%             $\mu$ range & \multicolumn{2}{p{20cm}}{$[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]$} \\ \hline
-%             networks & \multicolumn{2}{p{20cm}}{real (aucs, ckmp, lazega, eutr-A), Erdős–Rényi (er-2, er-3, er-5), Scale-free (sf-2, sf-3, sf-5)} \\ \hline
-%             s.~s.~method & \multicolumn{2}{p{20cm}}{deg-c, greedy, k-sh, k-sh-m, nghb-1s, nghb-2s, p-rnk, p-rnk-m, random, v-rnk, v-rnk-m} \\
-%         \end{tabular}%
-%         }
-%         \label{tab:parameter_space}
-%     \end{subtable}
-%     \caption{Networks used in experiments with their basic parameters shortlisted (tab.~\ref{tab:networks_eda}), values of each evaluated parameter - in total 27,720 executed experiments (tab.~\ref{tab:parameter_space}).}
-%     \end{table}
-% \end{block}
+%     \begin{figure}
+%         \centering
+%         \includegraphics[width=.75\textwidth]{../presentation/figures/ltm_example_or.pdf}
+%         \caption{Propagation according to LTM with the $OR$ strategy in a multilayer network -
+%         active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
+%     \end{figure}
 
+\heading{Modelling this case with \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
 
-
-\begin{alertblock}{A Short Example}
 \begin{lstlisting}[style=py, basicstyle=\footnotesize\ttfamily]
 import network_diffusion as nd
 
@@ -348,22 +287,40 @@ aggregated_logs_json = logs.get_aggragated_logs()
 # or just save a summary of the experiment with all the experiment's details
 logs.report(visualisation=True, path="my_experiment")
 \end{lstlisting}
+
+\heading{Outcomes}
+
+% 6. Save experiment results. User is able to save them to the file or print them out
+
+% .. literalinclude:: simulator_example.py
+%    :language: python
+%    :lines: 249
+
+% The logs contain:
+% * a description of the network (txt file),
+% * a description of the propagation model (txt file),
+% * a report of the spreading for all simulated phenomena (separate csv files),
+% * a capture of states of every single node at the end of each simulation step (JSON file),
+% * a brief visualisation of propagation.
+
+% .. figure:: images/experiment_vis.png
+%     :width: 600
+
+% In case of need to process the results directly in the Python, one can extract them with two
+% functions. For aggregated results for each process
+
+% .. literalinclude:: simulator_example.py
+%    :language: python
+%    :lines: 253
+
+% or for the detailed logs concerning all nodes
+
+% .. literalinclude:: simulator_example.py
+%    :language: python
+%    :lines: 257
+
+
 \end{alertblock}
-    
-% \begin{exampleblock}{Try the Library}
-%     To start using library just type in your shell:
-%     \begin{center}
-%         \large
-%         \begin{verbatim}
-%             pip install network-diffusion
-%         \end{verbatim}
-%     \end{center}
-%     \vspace{-1em}
-%     Or scan this code to reach the docs with more examples:
-%     \begin{figure}
-%         \includegraphics[width=10cm]{../presentation/figures/qr_code.pdf}
-%     \end{figure}
-% \end{exampleblock}
 
 \begin{block}{References}
     \printbibliography
