@@ -21,7 +21,6 @@
 \pgfplotsset{compat=1.14}
 \usepackage{anyfontsize}
 
-
 % for tables
 \usepackage{multirow}
 \usepackage{multicol}
@@ -136,13 +135,9 @@
 \begin{block}{Introduction}
     Spreading phenomena are one of the issues considered by a network science. They can be obeserved
     in various areas like: dynamics of political opinions, marketing campaigns, spread of epidemics,
-    computer viruses, etc. With the advancement of computational network science analytical 
-    approaches became insufficient for large graphs, prompting researchers to use computational
-    methods. In recent years, the scope of network science has significantly expanded beyond static
-    graphs to encompass more complex structures. The introduction of streaming, temporal, multilayer,
-    and hypernetwork approaches has brought new possibilities and imposed additional requirements.
-    Unfortunately, the pace of advancement is often too rapid for existing computational packages to
-    keep up with the functionality updates...
+    etc. With the advancement of network science analytical approaches became insufficient for large
+    graphs, prompting researchers to use computational methods. In recent years, the scope of network science has significantly expanded beyond static graphs to encompass more complex structures. The introduction of streaming, temporal, multilayer, and hypernetwork approaches has brought new possibilities and imposed additional requirements. Unfortunately, the pace of advancement is often
+    too rapid for existing computational packages to keep up with the functionality updates...
 \end{block}
 
 \begin{alertblock}{Problem}
@@ -176,106 +171,73 @@
     \end{figure}
 \end{block}
 
-\begin{block}{Key Features}
+\begin{block}{Key Features of \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
     \begin{itemize}
-        \item \textbf{End-to-End Simulation Workflow}: The library enables users 
-        to simulate diffusion processes in complex networks with ease. Whether
-        you are studying information spread, disease propagation, or any other
-        diffusion phenomena, this library has you covered.
-        \item \textbf{Support for Temporal Network Models}: You can work with temporal models, allowing you to
-        capture the dynamics of processes over time. These temporal models can be
-        created using regular time windows or leverage \textbf{CogSnet}.
-        \item \textbf{Support for Multilayer Network Models}: The library supports multilayer networks, which are
-        essential for modelling real-world systems with interconnected layers of
-        complexity
-        \item \textbf{Predefined Spreading Models}: You have the option to use predefined diffusion 
-        models such as the Linear Threshold Model, Independent Cascade Model, and more. Those are
-        implemented to simplify the simulation process, allowing users to focus on their specific
-        research questions.
-        \item \textbf{An Interface for Implementing Custom Spreading Models}: Additionally, 
-        \lstinline[style=py]{network-diffusion} allows you to define your own diffusion models using
-        open interfaces, providing flexibility for researchers to tailor simulations to their unique
-        requirements.
-        \item \textbf{New Centrality Measures}: The library provides a wide range of centrality 
-        measures specifically designed for multilayer networks. These measures can be valuable for
-        selecting influential seed nodes in diffusion processes.
-        \item \textbf{NetworkX Compatibility}: The package is built on top of  
-        \lstinline[style=py]{networkx}, ensuring seamless compatibility with this popular Python 
-        library for network analysis. You can easily integrate it into your existing
-        \lstinline[style=py]{networkx}-based workflows.
+        \item \textbf{End-to-End Simulation Workflow}
+        \item \textbf{Support for Temporal Network Models}
+        \item \textbf{Support for Multilayer Network Models}
+        \item \textbf{A Bunch of Predefined Spreading Models}
+        \item \textbf{An Interface for Implementing Custom Spreading Models}
+        \item \textbf{New Centrality Measures}
+        \item \textbf{NetworkX Compatibility}
     \end{itemize}
 \end{block}
+
+% \begin{exampleblock}{Example --- Linear Threshold Model in Multilayer Networks}
+\begin{exampleblock}{Example}
+    \heading{Linear Threshold Model in Multilayer Networks}
+    In a diffusion under Linear Threshold Model, each node:
+    \begin{itemize}
+        \item can fall in two states: \textit{active} and \textit{inactive},
+        \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all 
+        neighbours exceeds certain threshold ($\mu$).
+    \end{itemize}
+    In case of multilayer networks --- actors are the subject of the process, while the 
+    nodes are their auxiliary representation. Thus, we have to define how to aggregate impulses 
+    from the layers. In this example we will consider $OR$ strategy (aka protocol) which says that
+    the actor can be activated if any of nodes representing it gets activated.
+\end{exampleblock}
 
 \end{column}
 
 \separatorcolumn
 \begin{column}{\colwidth}
 
-\begin{alertblock}{Example}
+\begin{exampleblock}{Example}
 
-    \heading{Extending Linear Threshold Model to multilayer Networks}
-    In a diffusion under Linear Threshold Model~\cite{kempe2003maximizing}, each node:
-    \begin{itemize}
-        \item can fall in two states: \textit{active} and \textit{inactive},
-        \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all 
-        neighbours exceeds certain threshold ($\mu$).
-    \end{itemize}
-    In case of multilayer networks --- \textbf{actors are the subject of the process, while the 
-    nodes are their auxiliary representation}. Thus, we have to define how to aggregate impulses 
-    from the layers. In this example we will consider method introduced by~\cite{zhong2022mltm} --- 
-    a protocol functions, namely "OR" variant which says that the actor can be activated if any of 
-    nodes representing it gets activated.
-
-    \heading{Visualisation}
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\linewidth]{figures/ltm_example.pdf}
-        \caption{Example of spreading of MLTM in toy network with protocol $AND$.}
-        \label{fig:ltm_example_and}
-    \end{figure}
-% \end{alertblock}
-
-% \begin{alertblock}{A Short Example}
-
-
-% \begin{block}{Linear Threshold Model}
-%     Each node:
-%     \begin{itemize}
-%         \item can fall in two states: \textit{active} and \textit{inactive},
-%         \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all neighbours
-%         exceeds certain threshold.
-%     \end{itemize}
-%     \end{block}
-%     In case of multilayer networks the actors not the nodes\footnote{which can be considered as avatars
-%     of the actors on the network's layers} are a subject of the diffusion. Thus, we have to define
-%     how to aggregate impulses from the layers. In this example we will consider "OR" strategy, which 
-%     says that the actor can be activated if any of nodes representing it in the network gets activated.
-
-%     \begin{figure}
-%         \centering
-%         \includegraphics[width=.75\textwidth]{../presentation/figures/ltm_example_or.pdf}
-%         \caption{Propagation according to LTM with the $OR$ strategy in a multilayer network -
-%         active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
-%     \end{figure}
+\heading{Scenario to Simulate}
+A Figure below shows the case we would like to model with \lstinline[style=py]{network-diffusion} 
+--- MLTM with homogeneous threshold $\mu=0.3$ and protocol $OR$. The process will diffuse in a
+network with eleven actors, starting from the agent six and ten.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{../presentation/figures/ltm_example_or.pdf}
+\end{figure}
 
 \heading{Modelling this case with \lstinline[style=py, basicstyle=\large\ttfamily]{network-diffusion}}
 
 \begin{lstlisting}[style=py, basicstyle=\footnotesize\ttfamily]
 import network_diffusion as nd
 
-# define the model with its internal parameters
-spreading_model = nd.models.MICModel(
-    seeding_budget=[90, 10, 0],  # 95% act suspected, 10% infected, 0% recovered
-    seed_selector=nd.seeding.RandomSeedSelector(),  # pick infected act randomly
-    protocol="OR",  # how to aggregate impulses from the network's layers
-    probability=0.5,  # probability of infection
+# get the graph - a medium for spreading
+net = nd.mln.functions.get_toy_network_piotr()
+
+# set actor 6 and 10 as seeds (we can use another heuristic here as well)
+ac_6, ac_10 = net.get_actor(6), net.get_actor(10)
+ranking_list = [ac_6, ac_10, *set(net.get_actors()).difference({ac_6, ac_10})]
+seed_selector = nd.seeding.MockingActorSelector(ranking_list)
+seed_quota = 100 * 2 / net.get_actors_num()
+
+# define the model according to the given parameters
+spreading_model = nd.models.MLTModel(
+    seeding_budget=[100 - seed_quota, seed_quota],
+    seed_selector=seed_selector,
+    protocol="OR",
+    mi_value=0.3,  
 )
 
-# get the graph - a medium for spreading
-network = nd.mln.functions.get_toy_network_piotr()
-
 # perform the simulation that lasts four epochs
-simulator = nd.Simulator(model=spreading_model, network=network)
+simulator = nd.Simulator(model=spreading_model, network=net)
 logs = simulator.perform_propagation(n_epochs=3)
 
 # obtain detailed logs for each actor in the form of JSON
@@ -290,41 +252,37 @@ logs.report(visualisation=True, path="my_experiment")
 
 \heading{Outcomes}
 
-% 6. Save experiment results. User is able to save them to the file or print them out
-
-% .. literalinclude:: simulator_example.py
-%    :language: python
-%    :lines: 249
-
-% The logs contain:
-% * a description of the network (txt file),
-% * a description of the propagation model (txt file),
-% * a report of the spreading for all simulated phenomena (separate csv files),
-% * a capture of states of every single node at the end of each simulation step (JSON file),
-% * a brief visualisation of propagation.
-
+The output logs can be used for further analysis and contain:
+% \begin{itemize}
+%     \item a description of the network,
+%     \item a description of the propagation model,
+%     \item a report of the spreading for all simulated phenomena,
+%     \item a capture of states of each node during the simulation,
+%     \item a brief visualisation of the propagation.
+% \end{itemize}
 % .. figure:: images/experiment_vis.png
 %     :width: 600
 
-% In case of need to process the results directly in the Python, one can extract them with two
-% functions. For aggregated results for each process
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.395\textwidth}
+        \centering
+        \fbox{\includegraphics[width=\textwidth]{figures/output.png}}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \fbox{ \includegraphics[width=\textwidth]{figures/visualisation.png}}
+    \end{subfigure}
+    % \caption{kkk}
+\end{figure}
 
-% .. literalinclude:: simulator_example.py
-%    :language: python
-%    :lines: 253
-
-% or for the detailed logs concerning all nodes
-
-% .. literalinclude:: simulator_example.py
-%    :language: python
-%    :lines: 257
-
-
-\end{alertblock}
+\end{exampleblock}
 
 \begin{block}{References}
     \printbibliography
 \end{block}
+
+\vspace{30em}
 
 \end{column}
 \separatorcolumn
