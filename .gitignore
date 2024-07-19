@@ -1,9 +1,15 @@
 **/.DS_Store
 **/__pycache__
+*.aux
 *.bbl
+*.bcf
+*.blg
+*.log
 *.nav
+*.out
 *.run.xml
 *.snm
+*.toc
 *.synctex.gz
 *.vrb
 my_experiment
