@@ -178,38 +178,18 @@
     \hspace{10em}...\textbf{a gap among the available toolkits} emerges.
 \end{frame}
 
-\begin{frame}{\secname}
-    \begin{center}
-        For instance, which library should we choose if we have to * ?
-    \end{center}
-    \vspace{3em}
-    \begin{itemize}
-        \setlength{\itemindent}{-2em}
-        \item[] * model simultaneous spreading of opinions about advertised products
-        \item[] * convert dataset of interactions into a temporal graph
-        \item[] * process a multilayer network to extract its centrality measures
-        \item[] * identify super spreaders in a multiplex network under ICM
-    \end{itemize}
-\end{frame}
-
 % \begin{frame}{\secname}
-%     \onslide<1->{My research group works on problems related to multilayer/temporal networks,
-%     spreading phenomena, influence maximisation, data streams, etc.}
-%     \onslide<2->{\begin{center}
-%         \arrowdown
+%     \begin{center}
+%         For instance, which library should we choose if we have to * ?
 %     \end{center}
-%     As a result of our recent activities, we decided to merge and wrap up a code we developed into
-%     a reusable library and to share it with the community as an attempt of filling the gap in.}
-%     \onslide<3->{\begin{center}
-%         \arrowdown
-%     \end{center}
-%     The main permises under which we operated are:
-%     \begin{enumerate}
-%         \item<3-> support both for multilayer and temporal networks,
-%         \item<4-> support for spreading models with discrete states,
-%         \item<5-> compatibility with other tools commonly used in network science,
-%         \item<6-> releasing a tool in form of a framework with open interfaces.
-%     \end{enumerate}}
+%     \vspace{3em}
+%     \begin{itemize}
+%         \setlength{\itemindent}{-2em}
+%         \item[] * model simultaneous spreading of opinions about advertised products
+%         \item[] * convert dataset of interactions into a temporal graph
+%         \item[] * process a multilayer network to extract its centrality measures
+%         \item[] * identify super spreaders in a multiplex network under ICM
+%     \end{itemize}
 % \end{frame}
 
 \begin{frame}{\secname}
@@ -223,8 +203,8 @@
     \onslide<3->{\begin{center}
         \arrowdown
     \end{center}
-    With regard to the observed gap among existing toolkits, we decided to merge and wrap the code
-    into a library to share it with the community as a small contribution to make experiments easier.}
+    With regard to the observed gap, we decided to merge and wrap the code into a library to
+    share it with the community as a small contribution to make experiments easier.}
 \end{frame}
 
 \section{Key Features of \lstinline[style=py]{network-diffusion}}
@@ -254,29 +234,12 @@
     \end{itemize}
 \end{frame}
 
-% \begin{frame}[fragile]{\secname}
-%     To prepare the experiment we have to provide: \textbf{a network}, \textbf{a spreading model} and \textbf{auxiliary parameters}.
-%     Then, the simulation unfolds as follows:
-%     \vspace{1em}
-%     \begin{algorithmic}[1]
-%         \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs*}}
-%         \State \lstinline[style=py]{states_0} $\gets$ \lstinline[style=py]{model.determine_initial_states()}
-%         \State \lstinline[style=py]{model.update_network(states_0)} % \Comment{Predefined function in the \texttt{BaseModel} class}
-%         \For{\lstinline[style=py]{e} in \lstinline[style=py]{[1, ..., epochs]}}
-%         \State \quad \quad \lstinline[style=py]{states_e} $\gets$ \lstinline[style=py]{model.network_evaluation_step(network)}
-%         \State \quad \quad \lstinline[style=py]{model.update_network(network, states_e)}
-%         \EndFor
-%         \State \lstinline[style=py]{logs} $\gets$ generate logs from experiment \\
-%         \Return \lstinline[style=py]{logs}
-%         \EndProcedure
-%     \end{algorithmic}
-% \end{frame}
-
 \section{Example I - Predefined Model}
 
 \begin{frame}{\secname}
-    In this example, we will see how to trigger spread under the Linear Threshold Model in a toy,
+    In this example, we will see how to trigger spread under the LTM in a toy,
     multilayer network.
+    \pause
     \begin{block}{Linear Threshold Model}
     Each node:
     \begin{itemize}
@@ -285,10 +248,11 @@
         exceeds certain threshold.
     \end{itemize}
     \end{block}
-    In case of multilayer networks the actors not the nodes\footnote{which can be considered as avatars
-    of the actors on the network's layers} are a subject of the diffusion. Thus, we have to define
-    how to aggregate impulses from the layers. In this example we will consider "OR" strategy.
-    % which says that the actor can be activated if any of nodes representing it in the network gets activated.
+    \pause
+    In the case of multilayer networks, the actors, not the nodes (which can be considered as
+    avatars of the actors on the network's layers), are a subject of diffusion. Thus, we have to
+    define how to aggregate impulses from the layers. In this example, we will consider the "OR" strategy,
+    which says that the actor can be activated if any of nodes representing gets activated.
 \end{frame}
 
 \begin{frame}{\secname}
@@ -372,7 +336,7 @@
         \end{verbatim}
     \end{center}
     We have also published other useful resources:
-    \begin{itemize}[<+->]
+    \begin{itemize}
         \item PyPI website: \url{pypi.org/project/network-diffusion},
         \item GitHub page: \url{github.com/anty-filidor/network_diffusion},
         \item Reference guide: \url{network-diffusion.readthedocs.io},
