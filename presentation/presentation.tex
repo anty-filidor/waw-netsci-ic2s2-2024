@@ -2,11 +2,12 @@
 \usepackage[utf8]{inputenc}
 
 \usetheme{Madrid}
-\usecolortheme{seahorse}
+% \usecolortheme{seahorse}
 
 % For Polish langage
 \usepackage[T1]{fontenc}
 % \usepackage[polish]{babel}
+\usepackage{tikzsymbols}
 
 % For strikethrough text
 \usepackage{ulem}
@@ -55,6 +56,8 @@
 % For algorithms
 \usepackage{algorithm,algpseudocode}
 
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
 
 % Arrows
 \usepackage{tikz}
@@ -72,7 +75,7 @@
 \newcommand{\arrowdown}{\tikz [baseline=-1ex]{\node [myarrow,rotate=-90] {};}}
 
 % Title page
-\title[WAW 2024]{19th Workshop on Modelling and Mining Networks}
+\title[IC2S2 2024]{10th International Conference on Computational Social Science}
 \subtitle{Network Diffusion --- Framework to Simulate Spreading Processes in Complex Networks}
 \author[Micha{\l} Czuba et al.]{
     \textbf{Micha{\l} Czuba} \inst{1},
@@ -88,7 +91,7 @@
   \inst{1} Wroc{\l}aw University of Science and Technology\\
   \inst{2} University of Technology Sydney
 }
-\date[05.06.2024]{05.06.2024}
+\date[20.07.2024]{20.07.2024}
 \logo{\includegraphics[height=0.5cm]{figures/nsl.pdf}}
 
 \AtEndDocument{
@@ -101,7 +104,7 @@
         \begin{figure}
             \includegraphics[width=5cm]{figures/qr_code2.pdf}
         \end{figure}
-        If you like \lstinline[style=py]{network-diffusion} please star the repo :)
+        Scan this QR code to reach the main page of the project \Smiley
     \end{frame}
 }
 
@@ -110,15 +113,13 @@
 \frame{\titlepage}
 
 \begin{frame}{Agenda}
-    In this talk, I will introduce a computational library --- \lstinline[style=py]{network-diffusion}.
-    Here is the agenda:
     \tableofcontents
 \end{frame}
 
 \section{Motivation}
 
 \begin{frame}{\secname}
-    Spreading phenomena are one of the issues considered by a network science. They can be obeserved
+    Spreading phenomena are one of the problems considered by a network science. They can be obeserved
     in various areas like: dynamics of political opinions, marketing campaigns, spread of epidemics,
     computer viruses, etc.
     \begin{figure}
@@ -131,22 +132,21 @@
 \end{frame}
 
 \begin{frame}{\secname}
-    \onslide<1->{Analytical approaches are often insufficient for large graphs, prompting researchers to use 
-    computational methods, i.e. simulators.}
+    \onslide<1->{Analytical approaches to such phenomena are often insufficient for large graphs,
+    prompting researchers to use computational methods, i.e. simulations.}
     \onslide<2->{\begin{center}
         \vspace{1em}
         \arrowdown
         \vspace{1em}
     \end{center}
-    Thus, like in other branches of computer science, there have been developed tools which addres 
-    that issue, allowing to avoid starting from scratch and enhancing the reproducibility
-    of results.}
+    Thus, many tools were developed to address that issue, allow researchers to get rid of the need
+    to start their experiments from scratch, and enhance the reproducibility of results.}
 \end{frame}
 
 \begin{frame}{\secname}
     \begin{columns}[T]
         \begin{column}{.35\textwidth}
-            There is a bunch of tools that helps in sumulating diffusion processes in networks:
+            Here is a bunch of tools that help in simulating diffusion processes in networks:
             \begin{itemize}
                 \item \textbf{NDlib}\cite{ndlib},
                 \item GLEaMviz\cite{gleam},
@@ -169,84 +169,114 @@
 \end{frame}
 
 \begin{frame}{\secname}
-    However, if we consider...\\
+    However, if we consider more complex...\\
     \vspace{1em}
-    \hspace{3em}...more complex network models,... \\
+    \hspace{3em}...network models \textcolor{gray}{(e.g. multilayer graphs)}... \\
     \vspace{1em}
-    \hspace{3em}...spreading multiple processes at the same time... \\
+    \hspace{3em}...diffusion models \textcolor{gray}{(e.g. spreading of coexisting processes)}... \\
     \vspace{1em}
     \hspace{10em}...\textbf{a gap among the available toolkits} emerges.
 \end{frame}
 
 \begin{frame}{\secname}
-    \onslide<1->{A focus of our research group is oriented i.a. to: multilayer networks,
-    temporal networks, spreading phenomena, data streams.}
+    \begin{center}
+        For instance, which library should we choose if we have to * ?
+    \end{center}
+    \vspace{3em}
+    \begin{itemize}
+        \setlength{\itemindent}{-2em}
+        \item[] * model simultaneous spreading of opinions about advertised products
+        \item[] * convert dataset of interactions into a temporal graph
+        \item[] * process a multilayer network to extract its centrality measures
+        \item[] * identify super spreaders in a multiplex network under ICM
+    \end{itemize}
+\end{frame}
+
+% \begin{frame}{\secname}
+%     \onslide<1->{My research group works on problems related to multilayer/temporal networks,
+%     spreading phenomena, influence maximisation, data streams, etc.}
+%     \onslide<2->{\begin{center}
+%         \arrowdown
+%     \end{center}
+%     As a result of our recent activities, we decided to merge and wrap up a code we developed into
+%     a reusable library and to share it with the community as an attempt of filling the gap in.}
+%     \onslide<3->{\begin{center}
+%         \arrowdown
+%     \end{center}
+%     The main permises under which we operated are:
+%     \begin{enumerate}
+%         \item<3-> support both for multilayer and temporal networks,
+%         \item<4-> support for spreading models with discrete states,
+%         \item<5-> compatibility with other tools commonly used in network science,
+%         \item<6-> releasing a tool in form of a framework with open interfaces.
+%     \end{enumerate}}
+% \end{frame}
+
+\begin{frame}{\secname}
+    \onslide<1->{My research group works on problems related to multilayer/temporal networks,
+    spreading phenomena, influence maximisation, data streams, etc.}
     \onslide<2->{\begin{center}
         \arrowdown
     \end{center}
-    As a result of our recent activities, we decided to merge and wrap up a code we developed
-    into a reusable library. We also decided to to share it with the community in an attempt of
-    filling the gap in.}
+    During the research, we produced a code that can be reused as a boilerplate for further
+    experiments, with interfaces allowing anyone to quickly implement a custom spreading model.}
     \onslide<3->{\begin{center}
         \arrowdown
     \end{center}
-    The main operating principles that we determined were:
-    \begin{enumerate}
-        \item compatibility with other tools commonly used in data science,
-        \item development of a tool as a framework with open interfaces,
-        \item supporting both multilayer and temporal networks,
-        \item supporting spreading models with discrete states.
-    \end{enumerate}}
+    With regard to the observed gap among existing toolkits, we decided to merge and wrap the code
+    into a library to share it with the community as a small contribution to make experiments easier.}
 \end{frame}
 
-\section{Key Features}
+\section{Key Features of \lstinline[style=py]{network-diffusion}}
 
 \begin{frame}{\secname}
-    Functionalities of \lstinline[style=py]{network-diffusion}:
+    Functionalities of the library:
     \vspace{1em}
-    \begin{itemize}
-        \item end-to-end simulation workflow,
-        \item predefined spreading models (for multilayer and temporal networks),
-        \item an interface for implementing custom spreading models,
-        \item support for the temporal network models (CogSNet + discrete windows),
+    \begin{itemize}[<+->]
+        \item end-to-end workflow for simulations of spreading phenomena,
+        \item predefined (basic) spreading models,
+        \item an interface for implementing custom discrete spreading models,
+        \item support for temporal networks (CogSNet and snapshot-based),
         \item support for the multilayer networks,
-        \item centrality measures for multilayer networks.
+        \item most of centrality metrics extended to multilayer networks.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{\secname}
-    Environmental requirements for \lstinline[style=py]{network-diffusion}:
+    Environmental requirements/features:
     \vspace{1em}
     \begin{itemize}
+        \item released under MIT licence,
         \item support for Linux, macOS, and Windows\footnote{Although we develop and use it mostly on Unix OSs},
-        \item Python (preferred 3.10) compatibility,
+        \item Python >= 3.10 compatibility,
         \item C snippets in the CogSNet module to speed-up computations,
         \item NetworkX compatibility.
     \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{\secname}
-    To prepare the experiment we have to provide a network, a spreading model and auxiliary parameters.
-    Then, the simulation unfolds as follows:
-    \begin{algorithmic}[1]
-        \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs*}}
-        \State \lstinline[style=py]{states_0} $\gets$ \lstinline[style=py]{model.determine_initial_states()}
-        \State \lstinline[style=py]{model.update_network(states_0)} % \Comment{Predefined function in the \texttt{BaseModel} class}
-        \For{\lstinline[style=py]{e} in \lstinline[style=py]{[1, ..., epochs]}}
-        \State \quad \quad \lstinline[style=py]{states_e} $\gets$ \lstinline[style=py]{model.network_evaluation_step(network)}
-        \State \quad \quad \lstinline[style=py]{model.update_network(network, states_e)}
-        \EndFor
-        \State \lstinline[style=py]{logs} $\gets$ generate logs from experiment \\
-        \Return \lstinline[style=py]{logs}
-        \EndProcedure
-    \end{algorithmic}
-\end{frame}
+% \begin{frame}[fragile]{\secname}
+%     To prepare the experiment we have to provide: \textbf{a network}, \textbf{a spreading model} and \textbf{auxiliary parameters}.
+%     Then, the simulation unfolds as follows:
+%     \vspace{1em}
+%     \begin{algorithmic}[1]
+%         \Procedure{\lstinline[style=py]{perform_propagation}}{\lstinline[style=py]{network, model, epochs*}}
+%         \State \lstinline[style=py]{states_0} $\gets$ \lstinline[style=py]{model.determine_initial_states()}
+%         \State \lstinline[style=py]{model.update_network(states_0)} % \Comment{Predefined function in the \texttt{BaseModel} class}
+%         \For{\lstinline[style=py]{e} in \lstinline[style=py]{[1, ..., epochs]}}
+%         \State \quad \quad \lstinline[style=py]{states_e} $\gets$ \lstinline[style=py]{model.network_evaluation_step(network)}
+%         \State \quad \quad \lstinline[style=py]{model.update_network(network, states_e)}
+%         \EndFor
+%         \State \lstinline[style=py]{logs} $\gets$ generate logs from experiment \\
+%         \Return \lstinline[style=py]{logs}
+%         \EndProcedure
+%     \end{algorithmic}
+% \end{frame}
 
-\section{Example I - a Predefined Model}
+\section{Example I - Predefined Model}
 
 \begin{frame}{\secname}
-    In this example, we will see how to trigger spread under the Linear Threshold Model within a 
-    simple, multilayer network.
+    In this example, we will see how to trigger spread under the Linear Threshold Model in a toy,
+    multilayer network.
     \begin{block}{Linear Threshold Model}
     Each node:
     \begin{itemize}
@@ -257,8 +287,8 @@
     \end{block}
     In case of multilayer networks the actors not the nodes\footnote{which can be considered as avatars
     of the actors on the network's layers} are a subject of the diffusion. Thus, we have to define
-    how to aggregate impulses from the layers. In this example we will consider "OR" strategy, which 
-    says that the actor can be activated if any of nodes representing it in the network gets activated.
+    how to aggregate impulses from the layers. In this example we will consider "OR" strategy.
+    % which says that the actor can be activated if any of nodes representing it in the network gets activated.
 \end{frame}
 
 \begin{frame}{\secname}
@@ -276,12 +306,11 @@
     \end{center}
 \end{frame}
 
-\section{Example II - a Custom Model}
+\section{Example II - Custom Model}
 
 \begin{frame}{\secname}
     In this example we will consider a joint disease-awareness model (SIR-UA) that can be used e.g.
-    to assess the effectiveness of various countermeasures against the spread of COVID-19 
-    (\textbf{see the next presentation for details}):
+    to assess the effectiveness of various countermeasures against the spread of COVID-19:
     \begin{columns}[T]
         \captionsetup{font=scriptsize}
         \begin{column}{.5\textwidth}
@@ -335,19 +364,19 @@
 \section{Resources and References}
 
 \begin{frame}[fragile]{\secname}
-    The library can be installed via:
+    The library can be installed with:
     \begin{center}
         \large
         \begin{verbatim}
             pip install network-diffusion
         \end{verbatim}
     \end{center}
-    Other useful resources have been also published:
-    \begin{itemize}
-        \item PyPI website: \url{pypi.org/project/network-diffusion}
-        \item GitHub page: \url{github.com/anty-filidor/network_diffusion}
-        \item Reference guide: \url{network-diffusion.readthedocs.io}
-        \item A preprint of the paper: \url{arxiv.org/abs/2405.18085}
+    We have also published other useful resources:
+    \begin{itemize}[<+->]
+        \item PyPI website: \url{pypi.org/project/network-diffusion},
+        \item GitHub page: \url{github.com/anty-filidor/network_diffusion},
+        \item Reference guide: \url{network-diffusion.readthedocs.io},
+        \item Paper with more use-cases presented: \url{arxiv.org/abs/2405.18085}.
     \end{itemize}
 \end{frame}
 
@@ -355,19 +384,19 @@
 
 \begin{frame}{\secname}
     There is still some work to do...
+    \vspace{1em}
     \begin{itemize}
-        \item implemented in Python ---  performance can be better (only CogSNet implemented in C),
-        \item limited to discrete spreading models,
+        \item computational performance can be better,
+        \item we are limited to discrete spreading models,
+        \item we cannot model agent's complex states (e.g. internal/external),
         \item much less pre-defined spreading models than in NDlib,
-        \item no user interface --- a limitation for non-programmers,
-        \item GPL licence.
+        \item library maintenance guaranteed up to my graduation \Winkey.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
     \frametitle{References}
-    \bibliographystyle{amsalpha}
-    \bibliography{references.bib}
+    \printbibliography
 \end{frame}
 
 \addtocounter{framenumber}{1}
