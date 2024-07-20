@@ -234,43 +234,43 @@
     \end{itemize}
 \end{frame}
 
-\section{Example I - Predefined Model}
+% \section{Example I - Predefined Model}
 
-\begin{frame}{\secname}
-    In this example, we will see how to trigger spread under the LTM in a toy,
-    multilayer network.
-    \pause
-    \begin{block}{Linear Threshold Model}
-    Each node:
-    \begin{itemize}
-        \item can fall in two states: \textit{active} and \textit{inactive},
-        \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all neighbours
-        exceeds certain threshold.
-    \end{itemize}
-    \end{block}
-    \pause
-    In the case of multilayer networks, the actors, not the nodes (which can be considered as
-    avatars of the actors on the network's layers), are a subject of diffusion. Thus, we have to
-    define how to aggregate impulses from the layers. In this example, we will consider the "OR" strategy,
-    which says that the actor can be activated if any of nodes representing gets activated.
-\end{frame}
+% \begin{frame}{\secname}
+%     In this example, we will see how to trigger spread under the LTM in a toy,
+%     multilayer network.
+%     \pause
+%     \begin{block}{Linear Threshold Model}
+%     Each node:
+%     \begin{itemize}
+%         \item can fall in two states: \textit{active} and \textit{inactive},
+%         \item becomes \textit{active} if the fraction of its \textit{active} neighbors to all neighbours
+%         exceeds certain threshold.
+%     \end{itemize}
+%     \end{block}
+%     \pause
+%     In the case of multilayer networks, the actors, not the nodes (which can be considered as
+%     avatars of the actors on the network's layers), are a subject of diffusion. Thus, we have to
+%     define how to aggregate impulses from the layers. In this example, we will consider the "OR" strategy,
+%     which says that the actor can be activated if any of nodes representing gets activated.
+% \end{frame}
 
-\begin{frame}{\secname}
-    \begin{figure}
-        \centering
-        \includegraphics[width=.75\textwidth]{figures/ltm_example_or.pdf}
-        \caption{Propagation according to LTM with the $OR$ strategy in a multilayer network -
-        active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
-    \end{figure}
-\end{frame}
+% \begin{frame}{\secname}
+%     \begin{figure}
+%         \centering
+%         \includegraphics[width=.75\textwidth]{figures/ltm_example_or.pdf}
+%         \caption{Propagation according to LTM with the $OR$ strategy in a multilayer network -
+%         active actors: seeds $\{6, 10\}$, in a stable state: all of them.}
+%     \end{figure}
+% \end{frame}
 
-\begin{frame}{\secname}
-    \begin{center}
-        \large Let's model this problem with \lstinline[style=py]{network-diffusion}!
-    \end{center}
-\end{frame}
+% \begin{frame}{\secname}
+%     \begin{center}
+%         \large Let's model this problem with \lstinline[style=py]{network-diffusion}!
+%     \end{center}
+% \end{frame}
 
-\section{Example II - Custom Model}
+\section{Example - Custom Model}
 
 \begin{frame}{\secname}
     In this example we will consider a joint disease-awareness model (SIR-UA) that can be used e.g.
@@ -353,7 +353,7 @@
         \item computational performance can be better,
         \item we are limited to discrete spreading models,
         \item we cannot model agent's complex states (e.g. internal/external),
-        \item much less pre-defined spreading models than in NDlib,
+        \item much less predefined spreading models than in NDlib,
         \item library maintenance guaranteed up to my graduation \Winkey.
     \end{itemize}
 \end{frame}
